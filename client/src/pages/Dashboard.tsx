@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
+import { formatDistanceToNow } from 'date-fns'
 import {
   Bot,
   CheckCircle2,
-  ChevronRight,
+  Eye,
   MessageSquare,
   Plug,
+  Settings,
   Sparkles,
   Zap,
 } from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import { api, type AgentMessage, type HealthResponse } from '../lib/api'
 
@@ -29,7 +30,6 @@ type StatCardProps = {
   value: number
   tone: string
   iconBg: string
-  gradient: string
 }
 
 type AgentCardProps = {
@@ -79,26 +79,6 @@ function getGreeting() {
   return 'Good evening'
 }
 
-function inferProvider(agent: any) {
-  const provider = agent.provider ?? agent.modelProvider ?? agent.vendor
-  if (typeof provider === 'string' && provider.trim()) {
-    return provider
-  }
-
-  const model = String(agent.model ?? '').toLowerCase()
-
-  if (model.includes('claude')) return 'Anthropic'
-  if (model.includes('gpt') || model.includes('o1') || model.includes('o3') || model.includes('o4')) return 'OpenAI'
-  if (model.includes('llama') || model.includes('groq')) return 'Groq'
-  if (model.includes('gemini')) return 'Google'
-
-  return 'Local'
-}
-
-function inferRole(agent: any) {
-  return agent.role ?? agent.title ?? agent.description ?? 'General purpose agent'
-}
-
 function normalizeStatus(status?: string): StatusMeta {
   const value = String(status ?? 'idle').toLowerCase()
 
@@ -130,7 +110,7 @@ function getInitials(name: string) {
   return parts.map((part) => part[0]?.toUpperCase() ?? '').join('') || 'OP'
 }
 
-function truncateMessage(content: string, limit = 40) {
+function truncateMessage(content: string, limit = 60) {
   if (content.length <= limit) {
     return content
   }
@@ -149,19 +129,16 @@ function extractNumber(source: any, keys: string[]) {
   return 0
 }
 
-function StatCard({ icon: Icon, label, value, tone, iconBg, gradient }: StatCardProps) {
+function StatCard({ icon: Icon, label, value, tone, iconBg }: StatCardProps) {
   const displayValue = useCountUp(value)
 
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-paw-border bg-paw-surface p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow">
-      <div className="absolute inset-x-0 bottom-0 h-14 opacity-60" style={{ background: gradient }} />
-      <div className="relative">
-        <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${iconBg}`}>
-          <Icon size={18} className={tone} />
-        </div>
-        <div className="mb-1 text-3xl font-semibold tracking-tight text-paw-text">{displayValue}</div>
-        <div className="text-sm text-paw-muted">{label}</div>
+    <div className="rounded-xl border border-paw-border bg-paw-surface p-5 transition-all duration-200 hover:border-paw-border-strong hover:shadow-lg">
+      <div className={`mb-3 flex h-7 w-7 items-center justify-center rounded-lg ${iconBg}`}>
+        <Icon size={16} className={tone} />
       </div>
+      <div className="text-2xl font-bold text-paw-text">{displayValue}</div>
+      <div className="mt-1 text-xs font-medium text-paw-muted">{label}</div>
     </div>
   )
 }
@@ -193,37 +170,35 @@ function EmptyState({
 
 function AgentRowCard({ agent, onOpen }: AgentCardProps) {
   const status = normalizeStatus(agent.status)
-  const provider = inferProvider(agent)
   const model = agent.model ?? 'Model not configured'
 
   return (
     <button
       type="button"
       onClick={() => onOpen(agent.id)}
-      className="group flex w-full items-center gap-4 rounded-xl border border-paw-border bg-paw-surface px-4 py-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised hover:shadow-glow"
+      className="group flex w-full items-center gap-4 border-b border-paw-border-subtle bg-paw-surface px-4 py-3 text-left transition-colors hover:bg-paw-raised last:border-b-0"
     >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-paw-accent-bg text-sm font-semibold text-paw-accent">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-paw-accent to-violet-700 text-xs font-semibold text-white">
         {getInitials(agent.name ?? 'Agent')}
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="truncate text-sm font-semibold text-paw-text">{agent.name ?? 'Unnamed Agent'}</span>
-          <span className="badge bg-paw-raised text-paw-muted">{provider}</span>
-          <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${status.color}`}>
-            <span className={`h-2 w-2 rounded-full ${status.dot} ${status.pulse ? 'animate-pulse-soft' : ''}`} />
-            {status.label}
-          </span>
-        </div>
-
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-paw-muted">
-          <span className="truncate">{inferRole(agent)}</span>
-          <span className="text-paw-faint">•</span>
-          <span className="truncate">{model}</span>
-        </div>
+        <div className="truncate text-sm font-medium text-paw-text">{agent.name ?? 'Unnamed Agent'}</div>
+        <div className="mt-1 truncate text-xs text-paw-muted">{agent.role ?? 'General purpose agent'}</div>
       </div>
 
-      <ChevronRight size={16} className="shrink-0 text-paw-faint transition-transform duration-200 group-hover:translate-x-0.5" />
+      <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${status.color}`}>
+        <span className={`h-2 w-2 rounded-full ${status.dot} ${status.pulse ? 'animate-pulse-soft' : ''}`} />
+        {status.label}
+      </span>
+      <span className="rounded-md border border-paw-border bg-paw-raised px-1.5 py-0.5 text-[10px] font-mono text-paw-muted">
+        {model}
+      </span>
+      <div className="flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+        <MessageSquare size={16} className="text-paw-faint" />
+        <Settings size={16} className="text-paw-faint" />
+        <Eye size={16} className="text-paw-faint" />
+      </div>
     </button>
   )
 }
@@ -379,32 +354,21 @@ export function Dashboard() {
 
   return (
     <div className="flex h-full flex-1 flex-col overflow-y-auto bg-paw-bg">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col gap-8 p-6 md:p-8">
-        <section className="rounded-2xl border border-paw-border bg-[linear-gradient(135deg,rgba(124,58,237,0.16),rgba(9,9,11,0)_48%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0))] p-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="mb-2 text-sm font-medium text-paw-accent">{greeting}</p>
-              <h1 className="mb-2 text-3xl font-semibold tracking-tight text-paw-text md:text-4xl">
-                Welcome back to OpenPaw
-              </h1>
-              <div className="flex items-center gap-2 text-sm text-paw-muted">
-                <span className={`h-2.5 w-2.5 rounded-full ${online ? 'bg-paw-success animate-pulse-soft' : 'bg-paw-danger'}`} />
-                <span>{online ? 'OpenPaw is online' : 'OpenPaw is reconnecting'}</span>
-                {health?.timestamp && (
-                  <>
-                    <span className="text-paw-faint">•</span>
-                    <span>Last check {formatDistanceToNow(new Date(health.timestamp), { addSuffix: true })}</span>
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-paw-border bg-paw-surface px-4 py-3">
-              <div className="text-xs uppercase tracking-[0.22em] text-paw-faint">Platform</div>
-              <div className="mt-1 text-sm font-medium text-paw-text">
-                {health?.version ? `Version ${health.version}` : healthError ? 'Health unavailable' : 'Checking health'}
-              </div>
-            </div>
+      <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col gap-8 p-6 md:p-8 animate-fade-in">
+        <section>
+          <h1 className="text-2xl font-semibold text-paw-text">{greeting}</h1>
+          <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-paw-muted">
+            <span className={`h-2.5 w-2.5 rounded-full ${online ? 'bg-paw-success animate-pulse-soft' : 'bg-paw-danger'}`} />
+            <span>
+              {online ? 'OpenPaw is online' : 'OpenPaw is reconnecting'} · {agents.length} agents ready
+            </span>
+            {health?.timestamp && (
+              <>
+                <span className="text-paw-faint">·</span>
+                <span>Last check {formatDistanceToNow(new Date(health.timestamp), { addSuffix: true })}</span>
+              </>
+            )}
+            {healthError && <span className="text-paw-danger">Health unavailable</span>}
           </div>
         </section>
 
@@ -413,33 +377,29 @@ export function Dashboard() {
             icon={Bot}
             label="Total Agents"
             value={stats.totalAgents}
-            tone="text-paw-accent"
-            iconBg="bg-paw-accent-bg"
-            gradient="linear-gradient(180deg, rgba(124,58,237,0), rgba(124,58,237,0.14))"
+            tone="text-paw-accent-h"
+            iconBg="bg-paw-accent/15"
           />
           <StatCard
             icon={MessageSquare}
             label="Active Conversations"
             value={stats.activeConversations}
-            tone="text-paw-info"
-            iconBg="bg-paw-info-bg"
-            gradient="linear-gradient(180deg, rgba(59,130,246,0), rgba(59,130,246,0.14))"
+            tone="text-blue-400"
+            iconBg="bg-blue-500/15"
           />
           <StatCard
             icon={CheckCircle2}
             label="Tasks Completed"
             value={stats.completedTasks}
             tone="text-paw-success"
-            iconBg="bg-paw-success-bg"
-            gradient="linear-gradient(180deg, rgba(34,197,94,0), rgba(34,197,94,0.14))"
+            iconBg="bg-paw-success/15"
           />
           <StatCard
             icon={Zap}
             label="Skills Loaded"
             value={stats.skillsLoaded}
-            tone="text-paw-warning"
-            iconBg="bg-paw-warning-bg"
-            gradient="linear-gradient(180deg, rgba(245,158,11,0), rgba(245,158,11,0.14))"
+            tone="text-amber-400"
+            iconBg="bg-amber-500/15"
           />
         </section>
 
@@ -447,15 +407,13 @@ export function Dashboard() {
           <div className="flex min-h-0 flex-col gap-6">
             <div className="rounded-2xl border border-paw-border bg-paw-surface p-5">
               <div className="mb-5 flex items-center justify-between gap-3">
-                <div>
-                  <h2 className="text-lg font-semibold text-paw-text">Agent Status</h2>
-                  <p className="mt-1 text-sm text-paw-muted">Live readiness across your configured agents.</p>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-sm font-semibold text-paw-text">Agents</h2>
+                  <span className="badge bg-paw-raised text-paw-muted">{agents.length}</span>
                 </div>
-                {!loading && agents.length > 0 && (
-                  <button type="button" onClick={() => navigate('/agents')} className="btn-secondary">
-                    View all agents
-                  </button>
-                )}
+                <button type="button" onClick={() => navigate('/agents')} className="btn-primary">
+                  New Agent
+                </button>
               </div>
 
               {loading ? (
@@ -469,7 +427,7 @@ export function Dashboard() {
                   ))}
                 </div>
               ) : agents.length > 0 ? (
-                <div className="space-y-3">
+                <div className="rounded-xl border border-paw-border">
                   {agents.map((agent) => (
                     <AgentRowCard key={agent.id} agent={agent} onOpen={(id) => navigate(`/agents/${id}`)} />
                   ))}
@@ -487,7 +445,7 @@ export function Dashboard() {
 
             <div className="rounded-2xl border border-paw-border bg-paw-surface p-5">
               <div className="mb-4">
-                <h2 className="text-lg font-semibold text-paw-text">Quick Actions</h2>
+                <h2 className="text-sm font-semibold text-paw-text">Quick Actions</h2>
                 <p className="mt-1 text-sm text-paw-muted">Jump straight into the most common setup flows.</p>
               </div>
 
@@ -495,41 +453,41 @@ export function Dashboard() {
                 <button
                   type="button"
                   onClick={() => navigate('/agents')}
-                  className="group rounded-xl border border-paw-border bg-paw-bg p-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised"
+                  className="group rounded-xl border border-paw-border bg-paw-surface p-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised/50"
                 >
-                  <Bot size={18} className="mb-3 text-paw-accent" />
+                  <Bot size={20} className="mb-3 text-paw-accent" />
                   <div className="text-sm font-semibold text-paw-text">New Agent</div>
-                  <div className="mt-1 text-xs leading-5 text-paw-muted">Spin up a new local worker with tools and memory.</div>
+                  <div className="mt-1 text-xs text-paw-muted">Spin up a new local worker with tools and memory.</div>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => navigate('/chat')}
-                  className="group rounded-xl border border-paw-border bg-paw-bg p-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised"
+                  className="group rounded-xl border border-paw-border bg-paw-surface p-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised/50"
                 >
-                  <MessageSquare size={18} className="mb-3 text-paw-info" />
+                  <MessageSquare size={20} className="mb-3 text-blue-400" />
                   <div className="text-sm font-semibold text-paw-text">New Chat</div>
-                  <div className="mt-1 text-xs leading-5 text-paw-muted">Open a fresh conversation with your active agents.</div>
+                  <div className="mt-1 text-xs text-paw-muted">Open a fresh conversation with your active agents.</div>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => navigate('/mcps')}
-                  className="group rounded-xl border border-paw-border bg-paw-bg p-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised"
+                  className="group rounded-xl border border-paw-border bg-paw-surface p-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised/50"
                 >
-                  <Plug size={18} className="mb-3 text-paw-success" />
+                  <Plug size={20} className="mb-3 text-paw-success" />
                   <div className="text-sm font-semibold text-paw-text">Add MCP</div>
-                  <div className="mt-1 text-xs leading-5 text-paw-muted">Connect more tools and context through MCP servers.</div>
+                  <div className="mt-1 text-xs text-paw-muted">Connect more tools and context through MCP servers.</div>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => navigate('/import')}
-                  className="group rounded-xl border border-paw-border bg-paw-bg p-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised"
+                  className="group rounded-xl border border-paw-border bg-paw-surface p-4 text-left transition-all duration-200 hover:border-paw-border-strong hover:bg-paw-raised/50"
                 >
-                  <Sparkles size={18} className="mb-3 text-paw-warning" />
+                  <Sparkles size={20} className="mb-3 text-paw-warning" />
                   <div className="text-sm font-semibold text-paw-text">Import from OpenClaw</div>
-                  <div className="mt-1 text-xs leading-5 text-paw-muted">Bring over agents, prompts, and runtime config from an existing setup.</div>
+                  <div className="mt-1 text-xs text-paw-muted">Bring over agents, prompts, and runtime config from an existing setup.</div>
                 </button>
               </div>
             </div>
@@ -537,7 +495,7 @@ export function Dashboard() {
 
           <aside className="rounded-2xl border border-paw-border bg-paw-surface p-5">
             <div className="mb-5">
-              <h2 className="text-lg font-semibold text-paw-text">Recent Activity</h2>
+              <h2 className="text-sm font-semibold text-paw-text">Recent Activity</h2>
               <p className="mt-1 text-sm text-paw-muted">Latest message traffic across your agent network.</p>
             </div>
 
@@ -554,24 +512,22 @@ export function Dashboard() {
             ) : recentActivity.length > 0 ? (
               <div className="space-y-3">
                 {recentActivity.map((item) => (
-                  <div key={item.id} className="rounded-xl border border-paw-border bg-paw-bg px-4 py-4">
-                    <div className="flex items-start gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-paw-accent-bg text-xs font-semibold text-paw-accent">
-                        {getInitials(item.agentName)}
+                  <div key={item.id} className="flex items-start gap-3 border-b border-paw-border-subtle py-3">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-paw-accent-bg text-[10px] font-semibold text-paw-accent">
+                      {getInitials(item.agentName)}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="truncate text-xs font-medium text-paw-text">{item.agentName}</span>
+                        <span className="shrink-0 text-xs text-paw-faint">
+                          {item.createdAt
+                            ? formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })
+                            : 'Just now'}
+                        </span>
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-3">
-                          <span className="truncate text-sm font-medium text-paw-text">{item.agentName}</span>
-                          <span className="shrink-0 text-xs text-paw-faint">
-                            {item.createdAt
-                              ? formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })
-                              : 'Just now'}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-sm leading-6 text-paw-muted">
-                          {truncateMessage(item.content ?? 'No message content available')}
-                        </p>
-                      </div>
+                      <p className="mt-1 text-xs text-paw-muted">
+                        {truncateMessage(item.content ?? 'No message content available')}
+                      </p>
                     </div>
                   </div>
                 ))}

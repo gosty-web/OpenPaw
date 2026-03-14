@@ -51,16 +51,16 @@ function MessageBubble({ message, agentName }: { message: ChatMessage; agentName
         {!isUser && <AgentAvatar name={agentName} size="sm" />}
 
         <div
-          className={`max-w-xl rounded-2xl px-4 py-3 shadow-sm ${
+          className={`max-w-xl rounded-2xl px-4 py-2.5 ${
             isUser
               ? 'rounded-tr-sm bg-paw-accent text-white'
-              : 'rounded-tl-sm border border-paw-border bg-paw-raised text-paw-muted'
+              : 'rounded-tl-sm border border-paw-border bg-paw-surface text-paw-text'
           }`}
         >
-          <div className={isUser ? 'text-sm leading-7 whitespace-pre-wrap text-white' : 'text-sm leading-7'}>
+          <div className={isUser ? 'whitespace-pre-wrap text-sm leading-relaxed text-white' : 'text-sm leading-relaxed'}>
             {isUser ? message.content : <MarkdownMessage content={message.content} />}
           </div>
-          <div className={`mt-2 text-[11px] ${isUser ? 'text-white/70' : 'text-paw-faint'}`}>
+          <div className={`mt-1 text-[10px] ${isUser ? 'text-white/70 text-right' : 'text-paw-faint'}`}>
             {message.createdAt ? formatSessionTime(message.createdAt) : 'Just now'}
           </div>
         </div>
@@ -74,11 +74,11 @@ function TypingIndicator({ agentName }: { agentName: string }) {
     <div className="flex justify-start">
       <div className="flex items-end gap-3">
         <AgentAvatar name={agentName} size="sm" />
-        <div className="rounded-2xl rounded-tl-sm border border-paw-border bg-paw-raised px-4 py-3">
+        <div className="rounded-2xl rounded-tl-sm border border-paw-border bg-paw-surface px-4 py-2.5">
           <div className="flex items-center gap-1">
-            <span className="h-2 w-2 rounded-full bg-paw-info animate-bounce-dots [animation-delay:-0.32s]" />
-            <span className="h-2 w-2 rounded-full bg-paw-info animate-bounce-dots [animation-delay:-0.16s]" />
-            <span className="h-2 w-2 rounded-full bg-paw-info animate-bounce-dots" />
+            <span className="h-1.5 w-1.5 rounded-full bg-paw-muted animate-bounce-dots [animation-delay:-0.32s]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-paw-muted animate-bounce-dots [animation-delay:-0.16s]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-paw-muted animate-bounce-dots" />
           </div>
         </div>
       </div>
@@ -103,6 +103,7 @@ export function ChatDetail() {
   const [sending, setSending] = useState(false)
   const [selectedModel, setSelectedModel] = useState('')
   const requestedSessionId = searchParams.get('sessionId')
+  const canSend = Boolean(draft.trim()) && !sending
 
   const loadSessions = async (preferredSessionId?: string | null) => {
     if (!agentId) {
@@ -267,8 +268,8 @@ export function ChatDetail() {
 
   if (loadingAgent) {
     return (
-      <div className="grid h-full min-h-0 grid-cols-1 bg-paw-bg xl:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="border-r border-paw-border bg-paw-surface p-4">
+      <div className="flex h-full min-h-0 bg-paw-bg">
+        <aside className="w-[280px] border-r border-paw-border bg-paw-surface p-4">
           <SessionSkeleton />
           <div className="mt-3 space-y-3">
             {Array.from({ length: 4 }).map((_, index) => (
@@ -300,8 +301,8 @@ export function ChatDetail() {
   }
 
   return (
-    <div className="grid h-full min-h-0 grid-cols-1 bg-paw-bg xl:grid-cols-[320px_minmax(0,1fr)]">
-      <aside className="flex min-h-0 flex-col border-r border-paw-border bg-paw-surface">
+    <div className="flex h-full min-h-0 bg-paw-bg">
+      <aside className="flex w-[280px] min-h-0 flex-col border-r border-paw-border bg-paw-surface">
         <div className="border-b border-paw-border p-4">
           <div className="rounded-2xl border border-paw-border bg-paw-bg p-4">
             <div className="flex items-start gap-3">
@@ -322,13 +323,10 @@ export function ChatDetail() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-b border-paw-border px-4 py-3">
-          <div>
-            <div className="text-sm font-semibold text-paw-text">Sessions</div>
-            <div className="text-xs text-paw-faint">Resume context or start fresh.</div>
-          </div>
-          <button type="button" onClick={startSession} className="btn-ghost">
-            <Plus size={16} />
+        <div className="flex items-center justify-between px-4 pb-2 pt-4">
+          <div className="text-xs uppercase tracking-wide text-paw-faint">Sessions</div>
+          <button type="button" onClick={startSession} className="btn-ghost h-7 w-7 justify-center p-0">
+            <Plus size={14} />
           </button>
         </div>
 
@@ -346,20 +344,17 @@ export function ChatDetail() {
                   key={session.id}
                   type="button"
                   onClick={() => setActiveSessionId(session.id)}
-                  className={`w-full rounded-xl border p-4 text-left transition-all duration-150 ${
+                  className={`mx-2 rounded-lg px-3 py-2 text-left transition-colors ${
                     activeSessionId === session.id
-                      ? 'border-paw-accent bg-paw-accent-bg shadow-glow'
-                      : 'border-paw-border bg-paw-bg hover:border-paw-border-strong hover:bg-paw-raised'
+                      ? 'border border-paw-border bg-paw-raised'
+                      : 'border border-transparent hover:bg-paw-raised'
                   }`}
                 >
-                  <div className="mb-2 flex items-center justify-between gap-2">
-                    <div className="truncate text-sm font-medium text-paw-text">{truncateId(session.id)}</div>
-                    {activeSessionId === session.id && <span className="badge bg-paw-accent-bg text-paw-accent">Active</span>}
+                  <div className="truncate text-sm text-paw-text">{truncateId(session.id)}</div>
+                  <div className="mt-1 text-xs text-paw-faint">
+                    {session.messageCount ?? 0} message{(session.messageCount ?? 0) === 1 ? '' : 's'} ·{' '}
+                    {formatSessionTime(session.lastMessageAt ?? session.startedAt)}
                   </div>
-                  <div className="text-xs text-paw-muted">
-                    {session.messageCount ?? 0} message{(session.messageCount ?? 0) === 1 ? '' : 's'}
-                  </div>
-                  <div className="mt-2 text-xs text-paw-faint">{formatSessionTime(session.lastMessageAt ?? session.startedAt)}</div>
                 </button>
               ))}
             </div>
@@ -377,7 +372,7 @@ export function ChatDetail() {
       </aside>
 
       <section className="flex min-h-0 flex-col">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-paw-border bg-paw-bg/95 px-5 py-4 backdrop-blur">
+        <div className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-paw-border bg-paw-bg/95 px-6 backdrop-blur">
           <div className="flex min-w-0 items-center gap-3">
             <AgentAvatar name={agent.name} />
             <div className="min-w-0">
@@ -407,7 +402,7 @@ export function ChatDetail() {
           </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-6">
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
           {loadingMessages ? (
             <div className="space-y-4">
               {Array.from({ length: 4 }).map((_, index) => (
@@ -427,18 +422,20 @@ export function ChatDetail() {
               <div ref={bottomRef} />
             </div>
           ) : (
-            <div className="flex h-full flex-col items-center justify-center px-4 text-center">
-              <div className="mb-4 text-sm font-medium text-paw-accent">{agent.role ?? 'Agent'}</div>
-              <h1 className="mb-3 text-4xl font-semibold tracking-tight text-paw-text">{agent.name}</h1>
-              <p className="mb-8 text-base text-paw-muted">Start a conversation</p>
+            <div className="mt-16 flex flex-col items-center justify-center px-4 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-paw-raised text-sm font-semibold text-paw-accent">
+                {getInitials(agent.name)}
+              </div>
+              <div className="mt-4 text-xl font-semibold text-paw-text">{agent.name}</div>
+              <div className="mt-2 text-sm text-paw-muted">Start a conversation</div>
 
-              <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
                 {suggestedPrompts.map((prompt) => (
                   <button
                     key={prompt}
                     type="button"
                     onClick={() => void sendMessage(prompt)}
-                    className="rounded-full border border-paw-border bg-paw-surface px-4 py-2 text-sm text-paw-muted transition-colors hover:border-paw-border-strong hover:bg-paw-raised hover:text-paw-text"
+                    className="rounded-full border border-paw-border bg-paw-raised px-4 py-2 text-sm text-paw-muted transition-colors hover:border-paw-border-strong hover:text-paw-text"
                   >
                     {prompt}
                   </button>
@@ -448,53 +445,53 @@ export function ChatDetail() {
           )}
         </div>
 
-        <div className="sticky bottom-0 border-t border-paw-border bg-paw-bg/95 px-5 py-4 backdrop-blur">
-          <div className="rounded-2xl border border-paw-border bg-paw-surface p-3 shadow-lg">
-            <div className="flex items-end gap-3">
-              <div className="flex items-center gap-1 pb-1">
-                <button
-                  type="button"
-                  onClick={() => toast.info('Attachments are coming soon')}
-                  className="btn-ghost h-10 w-10 justify-center p-0"
-                  title="Attach file"
-                >
-                  <Paperclip size={16} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => toast.info('Voice input is coming soon')}
-                  className="btn-ghost h-10 w-10 justify-center p-0"
-                  title="Voice input"
-                >
-                  <Mic size={16} />
-                </button>
-              </div>
+        <div className="sticky bottom-0 border-t border-paw-border bg-paw-bg/95 px-4 pb-4 pt-2 backdrop-blur">
+          <div className="rounded-2xl border border-paw-border bg-paw-raised transition-colors focus-within:border-paw-accent/60">
+            <div className="flex items-center gap-2 px-4 pb-1 pt-3">
+              <button
+                type="button"
+                onClick={() => toast.info('Attachments are coming soon')}
+                className="text-paw-faint transition-colors hover:text-paw-muted"
+                title="Attach file"
+              >
+                <Paperclip size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => toast.info('Voice input is coming soon')}
+                className="text-paw-faint transition-colors hover:text-paw-muted"
+                title="Voice input"
+              >
+                <Mic size={16} />
+              </button>
+            </div>
 
-              <div className="flex-1">
-                <textarea
-                  ref={textareaRef}
-                  value={draft}
-                  onChange={(event) => setDraft(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' && !event.shiftKey) {
-                      event.preventDefault()
-                      void sendMessage()
-                    }
-                  }}
-                  placeholder={`Message ${agent.name}...`}
-                  rows={1}
-                  className="max-h-[136px] min-h-[44px] w-full resize-none bg-transparent px-1 py-2 text-sm leading-7 text-paw-text outline-none placeholder:text-paw-faint"
-                />
-                {draft.length > 800 && (
-                  <div className="mt-1 text-right text-[11px] text-paw-faint">{draft.length}/2000</div>
-                )}
-              </div>
+            <textarea
+              ref={textareaRef}
+              value={draft}
+              onChange={(event) => setDraft(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  event.preventDefault()
+                  void sendMessage()
+                }
+              }}
+              placeholder={`Message ${agent.name}...`}
+              rows={1}
+              className="min-h-[40px] max-h-[120px] w-full resize-none bg-transparent px-4 py-2 text-sm text-paw-text outline-none placeholder:text-paw-faint"
+            />
 
+            <div className="flex items-center justify-between px-3 pb-3">
+              <div className="text-xs text-paw-faint">{draft.length > 800 ? `${draft.length}/2000` : ''}</div>
               <button
                 type="button"
                 onClick={() => void sendMessage()}
-                disabled={!draft.trim() || sending}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-paw-accent text-white transition-colors hover:bg-paw-accent-h disabled:cursor-not-allowed disabled:opacity-40"
+                disabled={!canSend}
+                className={`flex h-8 w-8 items-center justify-center rounded-xl transition-colors ${
+                  canSend
+                    ? 'bg-paw-accent text-white hover:bg-paw-accent-h'
+                    : 'cursor-not-allowed bg-transparent text-paw-faint opacity-40'
+                }`}
                 title="Send message"
               >
                 <ArrowUp size={16} />

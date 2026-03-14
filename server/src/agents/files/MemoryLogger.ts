@@ -1,58 +1,62 @@
-import fs from 'fs-extra'
-import os from 'os'
-import path from 'path'
+import fs from 'fs-extra';
+import os from 'os';
+import path from 'path';
 
-function toDateKey(date: Date) {
-  return date.toISOString().slice(0, 10)
-}
-
+/**
+ * Manages daily memory log files for an agent.
+ */
 export class MemoryLogger {
-  private memoryDir: string
+  private memoryDir: string;
 
-  constructor(private agentId: string) {
-    this.memoryDir = path.join(os.homedir(), '.openpaw', 'agents', agentId, 'memory')
+  constructor(agentId: string) {
+    this.memoryDir = path.join(os.homedir(), '.openpaw', 'agents', agentId, 'memory');
   }
 
+  /**
+   * Appends a timestamped entry to today's memory log file.
+   */
   async append(entry: string): Promise<void> {
-    await fs.ensureDir(this.memoryDir)
-
-    const now = new Date()
-    const filePath = path.join(this.memoryDir, `${toDateKey(now)}.md`)
-    const timestamp = now.toISOString().slice(11, 19)
-    const line = `- [${timestamp}] ${entry.trim()}\n`
-
-    await fs.appendFile(filePath, line, 'utf8')
+    await fs.ensureDir(this.memoryDir);
+    const dateStr = new Date().toISOString().split('T')[0];
+    const filePath = path.join(this.memoryDir, `${dateStr}.md`);
+    const timestamp = new Date().toLocaleTimeString();
+    const line = `[${timestamp}] ${entry}\n`;
+    
+    await fs.appendFile(filePath, line);
   }
 
-  async readRecent(days: number): Promise<Array<{ date: string; content: string }>> {
-    await fs.ensureDir(this.memoryDir)
-    const items: Array<{ date: string; content: string }> = []
+  /**
+   * Reads memory logs from the last N days.
+   */
+  async readRecent(days: number): Promise<string[]> {
+    if (!await fs.pathExists(this.memoryDir)) return [];
 
-    for (let index = 0; index < days; index += 1) {
-      const date = new Date()
-      date.setDate(date.getDate() - index)
-      const dateKey = toDateKey(date)
-      const filePath = path.join(this.memoryDir, `${dateKey}.md`)
+    const files = await fs.readdir(this.memoryDir);
+    const sortedLogFiles = files
+      .filter(f => f.endsWith('.md'))
+      .sort((a, b) => b.localeCompare(a)); // Newest first
 
-      if (await fs.pathExists(filePath)) {
-        items.push({
-          date: dateKey,
-          content: await fs.readFile(filePath, 'utf8'),
-        })
-      }
+    const result: string[] = [];
+    const targetCount = Math.min(days, sortedLogFiles.length);
+
+    for (let i = 0; i < targetCount; i++) {
+      const content = await fs.readFile(path.join(this.memoryDir, sortedLogFiles[i]), 'utf-8');
+      result.push(content);
     }
 
-    return items
+    return result;
   }
 
+  /**
+   * Returns the date of the most recent log file.
+   */
   async getLatestDate(): Promise<string | null> {
-    await fs.ensureDir(this.memoryDir)
-    const entries = await fs.readdir(this.memoryDir)
-    const dates = entries
-      .filter((entry) => /^\d{4}-\d{2}-\d{2}\.md$/.test(entry))
-      .map((entry) => entry.replace(/\.md$/, ''))
-      .sort()
+    if (!await fs.pathExists(this.memoryDir)) return null;
 
-    return dates.at(-1) ?? null
+    const files = await fs.readdir(this.memoryDir);
+    const logFiles = files.filter(f => f.endsWith('.md')).sort();
+    
+    if (logFiles.length === 0) return null;
+    return logFiles[logFiles.length - 1].replace('.md', '');
   }
 }

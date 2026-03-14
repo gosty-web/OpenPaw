@@ -227,16 +227,17 @@ export function Skills() {
   return (
     <div className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <div className="rounded-2xl border border-paw-border bg-gradient-to-br from-paw-surface via-paw-surface to-paw-raised/70 p-5 shadow-sm">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-paw-accent-bg text-paw-accent">
-              <BookText size={20} />
+        <div className="relative overflow-hidden rounded-2xl border border-paw-border bg-paw-surface p-6 shadow-sm shadow-black/5">
+          <div className="relative z-10 flex items-start gap-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-paw-accent/10 text-paw-accent">
+              <BookText size={24} />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-paw-text">Skills are instruction files your agents read and follow.</h2>
-              <p className="mt-2 max-w-3xl text-sm leading-7 text-paw-muted">They can be workflows, domain knowledge, personality layers, or task templates. Import from GitHub or create your own.</p>
+              <h2 className="text-base font-medium text-paw-text">Instructional Intelligence</h2>
+              <p className="mt-1 text-sm leading-relaxed text-paw-muted">Skills are persistent instruction layers that define your agent's domain expertise, behavioral patterns, and multi-step workflows.</p>
             </div>
           </div>
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-paw-accent/5 blur-3xl" />
         </div>
 
         <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -259,24 +260,31 @@ export function Skills() {
           </div>
         </header>
 
-        <section className="rounded-2xl border border-paw-border bg-paw-surface p-4">
-          <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-            <label className="relative block">
-              <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-paw-faint" />
-              <input className="input pl-10" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search by skill name or tag" />
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setCategory(value)}
-                  className={`rounded-lg px-3 py-2 text-sm transition-colors ${category === value ? 'bg-paw-accent-bg text-paw-accent' : 'bg-paw-raised/60 text-paw-muted hover:bg-paw-raised hover:text-paw-text'}`}
-                >
-                  {value}
-                </button>
-              ))}
-            </div>
+        <section className="flex flex-col gap-4 rounded-2xl border border-paw-border bg-paw-surface/50 p-2 sm:flex-row sm:items-center">
+          <label className="relative flex-1">
+            <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-paw-faint" />
+            <input 
+              className="input w-full border-none bg-transparent pl-10 shadow-none focus:ring-0" 
+              value={search} 
+              onChange={(event) => setSearch(event.target.value)} 
+              placeholder="Search library..." 
+            />
+          </label>
+          <div className="flex flex-wrap gap-1 p-1 sm:border-l sm:border-paw-border sm:pl-4">
+            {categories.map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setCategory(value)}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                  category === value 
+                    ? 'bg-paw-accent-bg text-paw-accent' 
+                    : 'text-paw-muted hover:bg-paw-raised hover:text-paw-text'
+                }`}
+              >
+                {value}
+              </button>
+            ))}
           </div>
         </section>
 
@@ -298,44 +306,69 @@ export function Skills() {
             <p className="max-w-md text-sm leading-7 text-paw-muted">Create your first skill or import one from GitHub to start building a reusable instruction library for your agents.</p>
           </div>
         ) : (
-          <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredSkills.map((skill) => (
-              <article key={skill.id} className="card flex flex-col">
+              <article key={skill.id} className="group relative flex flex-col rounded-2xl border border-paw-border bg-paw-surface p-5 transition-all hover:border-paw-accent/30 hover:shadow-lg hover:shadow-black/10">
                 <div className="mb-4 flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="font-semibold text-paw-text">{skill.name}</h3>
-                    <span className="badge mt-2 bg-paw-accent-bg text-paw-accent">{skill.category ?? 'Custom'}</span>
+                  <div className="min-w-0">
+                    <h3 className="truncate font-semibold text-paw-text">{skill.name}</h3>
+                    <div className="mt-1 flex items-center gap-2">
+                       <span className="inline-flex items-center rounded-md bg-paw-accent/10 px-2 py-0.5 text-xs font-medium text-paw-accent">
+                        {skill.category ?? 'Custom'}
+                      </span>
+                      {skill.sourceType === 'github' && (
+                        <span className="inline-flex items-center gap-1 text-[10px] text-paw-faint">
+                          <Download size={10} /> GitHub
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <button type="button" onClick={() => void toggleSkill(skill)} className={`rounded-full px-3 py-1.5 text-xs font-medium ${skill.enabled !== false ? 'bg-paw-success-bg text-paw-success' : 'bg-paw-raised text-paw-muted'}`}>
-                    {skill.enabled !== false ? 'Enabled' : 'Disabled'}
+                  <button 
+                    type="button" 
+                    onClick={() => void toggleSkill(skill)} 
+                    className={`h-6 w-11 shrink-0 rounded-full p-1 transition-colors ${
+                      skill.enabled !== false ? 'bg-paw-success' : 'bg-paw-raised'
+                    }`}
+                  >
+                    <div className={`h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      skill.enabled !== false ? 'translate-x-5' : 'translate-x-0'
+                    }`} />
                   </button>
                 </div>
 
-                <p className="line-clamp-2 text-sm leading-7 text-paw-muted">{skill.description || previewLine(skill.content) || 'No description provided yet.'}</p>
+                <p className="mb-4 line-clamp-3 min-h-[4.5rem] text-sm leading-relaxed text-paw-muted">
+                  {skill.description || previewLine(skill.content) || 'Define clear instructions for specialized agent tasks.'}
+                </p>
 
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2">
                   {(skill.tags ?? []).slice(0, 3).map((tag) => (
-                    <span key={tag} className="badge bg-paw-raised text-paw-muted">
-                      {tag}
+                    <span key={tag} className="text-[10px] font-medium uppercase tracking-wider text-paw-faint">
+                      #{tag}
                     </span>
                   ))}
                 </div>
 
-                <div className="mt-4 truncate text-xs text-paw-faint">{skill.sourceType === 'github' ? skill.sourceUrl : 'Custom'}</div>
-
-                <div className="mt-auto pt-5">
-                  <div className="mb-3 flex items-center justify-between text-xs text-paw-faint">
-                    <span>{formatBytes(skill.size)}</span>
-                    <span>{relative(skill.updatedAt)}</span>
+                <div className="mt-6 flex items-center justify-between border-t border-paw-border pt-4">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] uppercase tracking-tighter text-paw-faint">Updated</span>
+                    <span className="text-xs text-paw-muted">{relative(skill.updatedAt)}</span>
                   </div>
-                  <div className="flex gap-2">
-                    <button type="button" className="btn-secondary flex-1 justify-center" onClick={() => setViewing(skill)}>
-                      <Eye size={15} />
-                      View
+                  <div className="flex gap-1.5">
+                    <button 
+                      type="button" 
+                      className="btn-secondary h-8 w-8 !p-0" 
+                      onClick={() => setViewing(skill)}
+                      title="View Details"
+                    >
+                      <Eye size={14} />
                     </button>
-                    <button type="button" className="btn-ghost px-3 text-paw-danger hover:bg-paw-danger-bg hover:text-paw-danger" onClick={() => void deleteSkill(skill)}>
-                      <Trash2 size={15} />
-                      Delete
+                    <button 
+                      type="button" 
+                      className="btn-ghost h-8 w-8 !p-0 text-paw-danger hover:bg-paw-danger-bg hover:text-paw-danger" 
+                      onClick={() => void deleteSkill(skill)}
+                      title="Delete"
+                    >
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 </div>

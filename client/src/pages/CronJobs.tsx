@@ -254,48 +254,72 @@ export function CronJobs() {
               <p className="max-w-md text-sm leading-7 text-paw-muted">Create your first cron job to put routine monitoring, reports, and maintenance on autopilot.</p>
             </div>
           ) : (
-            <div className="overflow-hidden rounded-2xl border border-paw-border">
-              <div className="grid gap-4 border-b border-paw-border bg-paw-bg px-4 py-3 text-xs uppercase tracking-[0.16em] text-paw-faint lg:grid-cols-[minmax(0,1.5fr)_220px_220px_260px]">
-                <div>Job</div>
-                <div>Schedule</div>
-                <div>Agent</div>
-                <div>Status</div>
-              </div>
-              <div className="divide-y divide-paw-border">
-                {jobs.map((job) => (
-                  <div key={job.id} className="group grid gap-4 bg-paw-surface px-4 py-4 transition-colors hover:bg-paw-raised/40 lg:grid-cols-[minmax(0,1.5fr)_220px_220px_260px]">
-                    <div className="min-w-0">
-                      <div className="font-medium text-paw-text">{job.name}</div>
-                      <div className="mt-1 truncate text-sm text-paw-muted">{job.description || 'No description provided'}</div>
-                    </div>
-                    <div className="text-sm text-paw-muted">{formatSchedule(job.schedule ?? '')}</div>
-                    <div className="flex items-center gap-3">
-                      <AgentAvatar name={job.agentName ?? 'Agent'} size="sm" />
-                      <div className="min-w-0">
-                        <div className="truncate text-sm font-medium text-paw-text">{job.agentName ?? 'Unknown agent'}</div>
-                        <div className="truncate text-xs text-paw-faint">{job.timezone ?? 'Africa/Lagos'}</div>
-                      </div>
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <div className={`text-sm font-medium ${job.enabled ? 'text-paw-success' : 'text-paw-warning'}`}>{job.enabled ? 'Active' : 'Paused'}</div>
-                          <div className="mt-1 text-xs text-paw-faint">Next run {relative(job.nextRunAt)}</div>
-                          <button type="button" className={`mt-1 text-xs ${job.lastRunStatus === 'failure' ? 'text-paw-danger' : 'text-paw-muted'}`} onClick={() => { setDetailsJob(job); setDetailsOpen(true) }}>
-                            Last run {job.lastRunStatus === 'never' ? 'not yet run' : job.lastRunStatus} {job.lastRunAt ? `- ${relative(job.lastRunAt)}` : ''}
+            <div className="overflow-hidden rounded-xl border border-paw-border">
+              <table className="min-w-full text-left text-sm">
+                <thead className="border-b border-paw-border bg-paw-raised text-[10px] uppercase tracking-wide text-paw-faint">
+                  <tr>
+                    <th className="px-4 py-3">Job</th>
+                    <th className="px-4 py-3">Schedule</th>
+                    <th className="px-4 py-3">Agent</th>
+                    <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3">Next Run</th>
+                    <th className="px-4 py-3">Last Result</th>
+                    <th className="px-4 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-paw-border-subtle">
+                  {jobs.map((job) => (
+                    <tr key={job.id} className="hover:bg-paw-raised/30">
+                      <td className="px-4 py-3">
+                        <div className="font-medium text-paw-text">{job.name}</div>
+                        <div className="mt-1 text-xs text-paw-muted">{job.description || 'No description provided'}</div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="rounded-lg border border-paw-border bg-paw-raised px-3 py-1 text-xs text-paw-muted">
+                          {formatSchedule(job.schedule ?? '')}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <AgentAvatar name={job.agentName ?? 'Agent'} size="sm" />
+                          <span className="text-xs text-paw-text">{job.agentName ?? 'Unknown agent'}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`rounded-full px-2.5 py-1 text-xs ${job.enabled ? 'bg-paw-success/15 text-paw-success border border-paw-success/25' : 'bg-paw-faint/15 text-paw-faint border border-paw-faint/25'}`}>
+                          {job.enabled ? 'Active' : 'Paused'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-xs text-paw-muted">{relative(job.nextRunAt)}</td>
+                      <td className="px-4 py-3 text-xs">
+                        {job.lastRunStatus === 'failure' ? (
+                          <span className="text-paw-danger">Failure</span>
+                        ) : job.lastRunStatus === 'success' ? (
+                          <span className="text-paw-success">Success</span>
+                        ) : (
+                          <span className="text-paw-faint">-</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <button type="button" className="btn-ghost h-8 w-8 justify-center p-0" onClick={() => void runNow(job)} aria-label="Run now">
+                            <Play size={14} />
+                          </button>
+                          <button type="button" className="btn-ghost h-8 w-8 justify-center p-0" onClick={() => openEdit(job)} aria-label="Edit">
+                            <Pencil size={14} />
+                          </button>
+                          <button type="button" className="btn-ghost h-8 w-8 justify-center p-0" onClick={() => void toggleStatus(job)} aria-label="Toggle">
+                            {job.enabled ? <Pause size={14} /> : <Play size={14} />}
+                          </button>
+                          <button type="button" className="btn-ghost h-8 w-8 justify-center p-0 text-paw-danger hover:bg-paw-danger-bg hover:text-paw-danger" onClick={() => void removeJob(job)} aria-label="Delete">
+                            <Trash2 size={14} />
                           </button>
                         </div>
-                        <div className="flex gap-2 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
-                          <button type="button" className="btn-ghost px-2 py-1 text-xs" onClick={() => openEdit(job)}>Edit</button>
-                          <button type="button" className="btn-ghost px-2 py-1 text-xs" onClick={() => void runNow(job)}>Run Now</button>
-                          <button type="button" className="btn-ghost px-2 py-1 text-xs" onClick={() => void toggleStatus(job)}>{job.enabled ? 'Pause' : 'Resume'}</button>
-                          <button type="button" className="btn-ghost px-2 py-1 text-xs text-paw-danger hover:bg-paw-danger-bg hover:text-paw-danger" onClick={() => void removeJob(job)}>Delete</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </section>
@@ -303,61 +327,69 @@ export function CronJobs() {
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? 'Edit Cron Job' : 'Create Job'}>
         <div className="space-y-6">
-          <section className="space-y-4">
-            <div className="text-sm font-semibold uppercase tracking-[0.16em] text-paw-faint">What</div>
-            <label className="block"><span className="label">Job Name</span><input className="input" value={name} onChange={(event) => setName(event.target.value)} /></label>
-            <label className="block"><span className="label">Description</span><textarea className="input min-h-[88px] resize-y" value={description} onChange={(event) => setDescription(event.target.value)} /></label>
-            <div className="rounded-xl border border-paw-border bg-paw-bg p-4">
-              <div className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-paw-faint">Assign to agent</div>
-              <button type="button" className="input flex items-center justify-between" onClick={() => setAgentDropdownOpen((current) => !current)}>
-                <span>{agents.find((agent) => agent.id === agentId)?.name ?? 'Select an agent'}</span>
-                <Search size={14} className="text-paw-faint" />
-              </button>
-              {agentDropdownOpen && (
-                <div className="mt-3 rounded-xl border border-paw-border bg-paw-surface p-3">
-                  <input className="input mb-3" value={agentSearch} onChange={(event) => setAgentSearch(event.target.value)} placeholder="Search agents" />
-                  <div className="max-h-48 space-y-2 overflow-y-auto">
-                    {filteredAgents.map((agent) => (
-                      <button key={agent.id} type="button" className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-paw-raised" onClick={() => { setAgentId(agent.id); setAgentSearch(agent.name); setAgentDropdownOpen(false) }}>
-                        <AgentAvatar name={agent.name} size="sm" />
-                        <div><div className="text-sm font-medium text-paw-text">{agent.name}</div><div className="text-xs text-paw-faint">{agent.role}</div></div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            <label className="block"><span className="label">Task Prompt</span><textarea className="input min-h-[120px] resize-y" value={prompt} onChange={(event) => setPrompt(event.target.value)} /></label>
-          </section>
-
-          <section className="space-y-4">
-            <div className="text-sm font-semibold uppercase tracking-[0.16em] text-paw-faint">When</div>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { id: '15m', label: 'Every 15 min' },
-                { id: 'hourly', label: 'Every hour' },
-                { id: 'daily', label: 'Daily' },
-                { id: 'weekly', label: 'Weekly' },
-                { id: 'custom', label: 'Custom' },
-              ].map((option) => (
-                <button key={option.id} type="button" onClick={() => setPreset(option.id as Preset)} className={`rounded-full px-4 py-2 text-sm transition-colors ${preset === option.id ? 'bg-paw-accent-bg text-paw-accent' : 'bg-paw-raised text-paw-muted hover:text-paw-text'}`}>
-                  {option.label}
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+            <section className="space-y-4">
+              <div className="text-sm font-semibold uppercase tracking-[0.16em] text-paw-faint">What</div>
+              <label className="block"><span className="label">Job Name</span><input className="input" value={name} onChange={(event) => setName(event.target.value)} /></label>
+              <label className="block"><span className="label">Description</span><textarea className="input min-h-[88px] resize-y" value={description} onChange={(event) => setDescription(event.target.value)} /></label>
+              <div className="rounded-xl border border-paw-border bg-paw-bg p-4">
+                <div className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-paw-faint">Assign to agent</div>
+                <button type="button" className="input flex items-center justify-between" onClick={() => setAgentDropdownOpen((current) => !current)}>
+                  <span>{agents.find((agent) => agent.id === agentId)?.name ?? 'Select an agent'}</span>
+                  <Search size={14} className="text-paw-faint" />
                 </button>
-              ))}
-            </div>
-
-            {preset === 'daily' && <label className="block max-w-[220px]"><span className="label">Time</span><input className="input" type="time" value={dailyTime} onChange={(event) => setDailyTime(event.target.value)} /></label>}
-            {preset === 'weekly' && <div className="grid gap-4 md:grid-cols-2"><label className="block"><span className="label">Day</span><select className="input" value={weeklyDay} onChange={(event) => setWeeklyDay(event.target.value)}>{weekdays.map((day) => <option key={day.value} value={day.value}>{day.label}</option>)}</select></label><label className="block"><span className="label">Time</span><input className="input" type="time" value={weeklyTime} onChange={(event) => setWeeklyTime(event.target.value)} /></label></div>}
-            {preset === 'custom' && (
-              <div className="space-y-3 rounded-xl border border-paw-border bg-paw-bg p-4">
-                <label className="block"><span className="label">Cron Expression</span><input className="input font-mono" value={customCron} onChange={(event) => setCustomCron(event.target.value)} placeholder="0 9 * * 1-5" /></label>
-                <div className="text-sm text-paw-text">{formatSchedule(customCron)}</div>
-                <div className="text-xs uppercase tracking-[0.16em] text-paw-faint">min | hour | day | month | weekday</div>
+                {agentDropdownOpen && (
+                  <div className="mt-3 rounded-xl border border-paw-border bg-paw-surface p-3">
+                    <input className="input mb-3" value={agentSearch} onChange={(event) => setAgentSearch(event.target.value)} placeholder="Search agents" />
+                    <div className="max-h-48 space-y-2 overflow-y-auto">
+                      {filteredAgents.map((agent) => (
+                        <button key={agent.id} type="button" className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-paw-raised" onClick={() => { setAgentId(agent.id); setAgentSearch(agent.name); setAgentDropdownOpen(false) }}>
+                          <AgentAvatar name={agent.name} size="sm" />
+                          <div><div className="text-sm font-medium text-paw-text">{agent.name}</div><div className="text-xs text-paw-faint">{agent.role}</div></div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
+              <label className="block"><span className="label">Task Prompt</span><textarea className="input min-h-[120px] resize-y" value={prompt} onChange={(event) => setPrompt(event.target.value)} /></label>
+            </section>
 
-            <label className="block max-w-sm"><span className="label">Timezone</span><select className="input" value={timezone} onChange={(event) => setTimezone(event.target.value)}>{timezones.map((entry) => <option key={entry} value={entry}>{entry}</option>)}</select></label>
-          </section>
+            <section className="space-y-4">
+              <div className="text-sm font-semibold uppercase tracking-[0.16em] text-paw-faint">When</div>
+              <div className="grid gap-2">
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { id: '15m', label: 'Every 15 min' },
+                    { id: 'hourly', label: 'Every hour' },
+                    { id: 'daily', label: 'Daily' },
+                    { id: 'weekly', label: 'Weekly' },
+                    { id: 'custom', label: 'Custom' },
+                  ].map((option) => (
+                    <button key={option.id} type="button" onClick={() => setPreset(option.id as Preset)} className={`rounded-lg border px-3 py-2 text-xs text-center ${preset === option.id ? 'border-paw-accent bg-paw-accent-bg text-paw-accent' : 'border-paw-border bg-paw-raised text-paw-muted hover:text-paw-text'}`}>
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+
+                {preset === 'daily' && <label className="block max-w-[220px]"><span className="label">Time</span><input className="input" type="time" value={dailyTime} onChange={(event) => setDailyTime(event.target.value)} /></label>}
+                {preset === 'weekly' && <div className="grid gap-4 md:grid-cols-2"><label className="block"><span className="label">Day</span><select className="input" value={weeklyDay} onChange={(event) => setWeeklyDay(event.target.value)}>{weekdays.map((day) => <option key={day.value} value={day.value}>{day.label}</option>)}</select></label><label className="block"><span className="label">Time</span><input className="input" type="time" value={weeklyTime} onChange={(event) => setWeeklyTime(event.target.value)} /></label></div>}
+                {preset === 'custom' && (
+                  <div className="space-y-3 rounded-xl border border-paw-border bg-paw-bg p-4">
+                    <label className="block"><span className="label">Cron Expression</span><input className="input font-mono" value={customCron} onChange={(event) => setCustomCron(event.target.value)} placeholder="0 9 * * 1-5" /></label>
+                    <div className="rounded-lg border border-paw-border bg-paw-raised px-3 py-2 text-xs text-paw-success">{formatSchedule(customCron)}</div>
+                    <div className="flex flex-wrap gap-2 text-[10px] font-mono text-paw-faint">
+                      {['min', 'hour', 'day', 'month', 'weekday'].map((item) => (
+                        <span key={item} className="rounded border border-paw-border bg-paw-raised px-1.5 py-0.5">{item}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <label className="block max-w-sm"><span className="label">Timezone</span><select className="input" value={timezone} onChange={(event) => setTimezone(event.target.value)}>{timezones.map((entry) => <option key={entry} value={entry}>{entry}</option>)}</select></label>
+            </section>
+          </div>
 
           <section className="space-y-4">
             <div className="text-sm font-semibold uppercase tracking-[0.16em] text-paw-faint">Options</div>

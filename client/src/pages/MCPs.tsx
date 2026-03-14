@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { AlertTriangle, CheckCircle2, Pencil, Play, Plus, PlugZap, Trash2, X } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Link2, Pencil, Play, Plus, PlugZap, Trash2, X, Zap } from 'lucide-react'
 import { Modal } from '../components/Modal'
 import { api, type MCPServer } from '../lib/api'
 import { toast } from '../lib/toast'
@@ -270,73 +270,115 @@ export function MCPs() {
   }
 
   return (
-    <div className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="min-h-0 flex-1 overflow-y-auto px-4 py-8 sm:px-6 lg:px-8 animate-fade-in">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8">
+        <header className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between sticky top-0 z-20 pt-2 pb-6 bg-paw-bg bg-opacity-90 backdrop-blur-sm -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-3">
-              <h1 className="text-[clamp(1.75rem,1.4rem+1vw,2.2rem)] font-semibold tracking-tight text-paw-text">MCP Connections</h1>
-              <span className="badge bg-paw-raised text-paw-muted">{connectedCount} connected</span>
+              <h1 className="text-3xl font-bold tracking-tight text-paw-text">MCP Protocol</h1>
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-paw-raised border border-paw-border">
+                <div className="w-1.5 h-1.5 rounded-full bg-paw-success animate-pulse" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-paw-muted">{connectedCount} Active Nodes</span>
+              </div>
             </div>
-            <p className="max-w-2xl text-sm text-paw-muted">Manage the tool servers your agents can reach for when they need filesystem access, search, browser automation, and more.</p>
+            <p className="max-w-2xl text-sm text-paw-muted leading-relaxed">Connect specialized tool servers to grant agents capabilities like local filesystem manipulation, real-time search, and browser automation via Model Context Protocol.</p>
           </div>
-          <button type="button" className="btn-primary self-start lg:self-auto" onClick={openCreate}>
-            <Plus size={16} />
-            Add MCP
+          <button type="button" className="btn-primary h-11 px-6 shadow-glow self-start lg:self-auto group" onClick={openCreate}>
+            <Plus size={18} className="group-hover:rotate-90 transition-transform" />
+            Integrate New MCP
           </button>
         </header>
 
-        <section className="rounded-2xl border border-paw-border bg-paw-surface p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-paw-text">Connected MCPs</h2>
-            <span className="text-xs uppercase tracking-[0.18em] text-paw-faint">Live connections</span>
+        <section className="space-y-6">
+          <div className="flex items-center justify-between border-b border-paw-border-subtle pb-4">
+            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-paw-faint">Operational Connections</h2>
+            <div className="flex gap-4">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-paw-faint">
+                <span className="w-2 h-2 rounded-full bg-paw-success" /> Connected
+              </div>
+              <div className="flex items-center gap-2 text-[10px] font-bold text-paw-faint">
+                <span className="w-2 h-2 rounded-full bg-paw-danger" /> Faulty
+              </div>
+            </div>
           </div>
 
           {loading ? (
-            <div className="space-y-3">
-              {Array.from({ length: 4 }, (_, index) => (
-                <div key={index} className="h-12 animate-pulse rounded-xl bg-paw-raised" />
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {Array.from({ length: 6 }, (_, index) => (
+                <div key={index} className="h-44 animate-pulse rounded-2xl bg-paw-surface border border-paw-border" />
               ))}
             </div>
           ) : mcps.length === 0 ? (
-            <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border border-dashed border-paw-border bg-paw-bg px-6 text-center">
-              <PlugZap size={42} className="mb-4 text-paw-faint opacity-20" />
-              <h3 className="mb-2 text-lg font-semibold text-paw-text">No MCPs connected</h3>
-              <p className="max-w-md text-sm leading-7 text-paw-muted">Add tools to give your agents superpowers.</p>
+            <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-paw-border bg-paw-surface/50 py-20 text-center animate-slide-up">
+              <div className="relative mb-6">
+                <PlugZap size={64} className="text-paw-faint opacity-10" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Plus size={24} className="text-paw-accent animate-bounce" />
+                </div>
+              </div>
+              <h3 className="mb-2 text-xl font-bold text-paw-text">No active MCP nodes detected</h3>
+              <p className="max-w-md text-sm leading-relaxed text-paw-muted px-8">Your ecosystem is currently sandboxed. Connect your first MCP server below to expand your agent's action space.</p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 animate-slide-up">
               {mcps.map((mcp) => {
                 const targetText = mcp.transport === 'stdio' ? `${mcp.command ?? ''} ${(mcp.args ?? []).join(' ')}`.trim() : mcp.url ?? ''
+                const isEnabled = mcp.enabled !== false
                 return (
-                  <div key={mcp.id} className="grid min-h-12 items-center gap-3 rounded-xl border border-paw-border bg-paw-bg px-4 py-3 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_auto]" title={targetText}>
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className={`h-2.5 w-2.5 rounded-full ${statusDot(mcp.status)}`} />
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="truncate font-medium text-paw-text">{mcp.name}</span>
-                          <span className={`badge ${transportBadge(mcp.transport)}`}>{mcp.transport ?? 'stdio'}</span>
+                  <div 
+                    key={mcp.id} 
+                    className={`group relative flex flex-col h-44 rounded-2xl border transition-all p-5 hover:shadow-lg ${isEnabled ? 'bg-paw-surface border-paw-border hover:border-paw-border-strong' : 'bg-paw-raised/20 border-paw-border-subtle opacity-60 grayscale hover:grayscale-0'}`}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-2.5 h-2.5 rounded-full shrink-0 shadow-sm ${statusDot(mcp.status)}`} />
+                        <div className="min-w-0">
+                          <h3 className="font-bold text-paw-text truncate tracking-tight">{mcp.name}</h3>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className={`text-[9px] font-extrabold uppercase tracking-widest px-1.5 py-0.5 rounded leading-none ${transportBadge(mcp.transport)}`}>
+                              {mcp.transport ?? 'stdio'}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="min-w-0">
-                      <div className="truncate text-sm text-paw-muted">{targetText || 'No target configured yet'}</div>
-                      <div className="mt-1 text-xs text-paw-faint">{formatCount(mcp.agentCount)}</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button type="button" onClick={() => void toggleEnabled(mcp)} className={`rounded-full px-3 py-1.5 text-xs font-medium ${mcp.enabled !== false ? 'bg-paw-success-bg text-paw-success' : 'bg-paw-raised text-paw-muted'}`}>
-                        {mcp.enabled !== false ? 'Enabled' : 'Disabled'}
-                      </button>
-                      <button type="button" className="btn-ghost h-9 w-9 justify-center p-0" onClick={() => openEdit(mcp)} aria-label={`Edit ${mcp.name}`}>
-                        <Pencil size={15} />
-                      </button>
-                      <button type="button" className="btn-ghost h-9 w-9 justify-center p-0" onClick={() => void runTest(mcp)} aria-label={`Test ${mcp.name}`}>
-                        <Play size={15} />
-                      </button>
-                      <button type="button" className="btn-ghost h-9 w-9 justify-center p-0 text-paw-danger hover:bg-paw-danger-bg hover:text-paw-danger" onClick={() => void removeMcp(mcp)} aria-label={`Delete ${mcp.name}`}>
-                        <Trash2 size={15} />
+                      <button 
+                        type="button" 
+                        onClick={() => void toggleEnabled(mcp)} 
+                        className={`h-6 px-2 rounded-full text-[10px] font-bold uppercase tracking-tighter transition-all ${isEnabled ? 'bg-paw-success-bg text-paw-success border border-paw-success/20' : 'bg-paw-raised text-paw-faint border border-paw-border'}`}
+                      >
+                        {isEnabled ? 'Live' : 'Dark'}
                       </button>
                     </div>
+
+                    <div className="flex-1 min-w-0 mb-4">
+                      <p className="text-[11px] font-mono text-paw-muted bg-paw-bg/50 p-2 rounded-lg border border-paw-border/50 truncate opacity-80" title={targetText}>
+                        {targetText || 'Null endpoint reference'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-end justify-between">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-[10px] font-bold text-paw-faint uppercase tracking-widest">Visibility</span>
+                        <span className="text-[10px] text-paw-muted font-medium">{formatCount(mcp.agentCount)}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button type="button" className="w-9 h-9 flex items-center justify-center rounded-xl bg-paw-raised border border-paw-border hover:border-paw-accent hover:text-paw-accent transition-colors" onClick={() => openEdit(mcp)}>
+                          <Pencil size={14} />
+                        </button>
+                        <button type="button" className="w-9 h-9 flex items-center justify-center rounded-xl bg-paw-raised border border-paw-border hover:border-paw-accent hover:text-paw-accent transition-colors" onClick={() => void runTest(mcp)}>
+                          <Play size={14} />
+                        </button>
+                        <button type="button" className="w-9 h-9 flex items-center justify-center rounded-xl bg-paw-raised border border-paw-border hover:bg-paw-danger-bg hover:text-paw-danger hover:border-paw-danger/30 transition-colors" onClick={() => void removeMcp(mcp)}>
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {!isEnabled && (
+                      <div className="absolute inset-x-0 bottom-0 h-1 bg-paw-faint/10 rounded-b-2xl overflow-hidden">
+                        <div className="h-full bg-paw-accent/20 w-1/3" />
+                      </div>
+                    )}
                   </div>
                 )
               })}
@@ -344,207 +386,220 @@ export function MCPs() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-paw-border bg-paw-surface p-5">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-paw-text">Available to Add</h2>
-            <span className="text-xs uppercase tracking-[0.18em] text-paw-faint">Popular starters</span>
+        <section className="space-y-6 pt-4 border-t border-paw-border-subtle">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-paw-faint">Protocol Marketplace</h2>
+            <div className="text-[10px] font-bold text-paw-accent bg-paw-accent-bg px-2 py-0.5 rounded border border-paw-accent/20">Official Templates</div>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {popularMcps.map((template) => (
-              <article key={template.name} className="rounded-2xl border border-paw-border bg-paw-bg p-4">
-                <div className="mb-3 flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="font-semibold text-paw-text">{template.name}</h3>
-                    <p className="mt-1 text-sm text-paw-muted">{template.description}</p>
+              <article key={template.name} className="group relative rounded-2xl border border-paw-border bg-paw-surface p-5 hover:border-paw-accent/50 transition-all overflow-hidden">
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="font-bold text-paw-text tracking-tight group-hover:text-paw-accent transition-colors">{template.name}</h3>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-paw-faint bg-paw-raised px-1.5 py-0.5 rounded">stdio</span>
                   </div>
-                  <span className="badge bg-paw-raised text-paw-muted">stdio</span>
+                  <p className="text-xs text-paw-muted leading-relaxed line-clamp-2 mb-4 h-8">{template.description}</p>
+                  <div className="text-[10px] font-mono text-paw-faint opacity-50 mb-5 break-all line-clamp-1">{template.packageName}</div>
+                  <button type="button" className="w-full h-10 flex items-center justify-center gap-2 rounded-xl bg-paw-raised border border-paw-border font-bold text-xs uppercase tracking-widest text-paw-text hover:bg-paw-accent hover:text-white hover:border-paw-accent transition-all active:scale-95" onClick={() => void createFromTemplate(template)}>
+                    <PlugZap size={14} />
+                    Deploy Instance
+                  </button>
                 </div>
-                <div className="mb-4 text-xs font-mono text-paw-faint">{template.packageName}</div>
-                <button type="button" className="btn-secondary w-full justify-center" onClick={() => void createFromTemplate(template)}>
-                  Add
-                </button>
+                <div className="absolute top-0 right-0 w-24 h-24 bg-paw-accent/5 rounded-full -translate-y-12 translate-x-12 group-hover:scale-150 transition-transform duration-700" />
               </article>
             ))}
           </div>
         </section>
       </div>
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? 'Edit MCP' : 'Add MCP'}>
-        <div className="space-y-6">
-          <div className="flex flex-wrap gap-2">
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? 'Node Configuration' : 'Establish Connection'}>
+        <div className="space-y-8 p-1">
+          <div className="flex gap-4 p-1.5 bg-paw-raised rounded-2xl w-fit border border-paw-border">
             {(['stdio', 'sse', 'http'] as McpTab[]).map((value) => (
               <button
                 key={value}
                 type="button"
                 onClick={() => setTab(value)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${tab === value ? 'bg-paw-accent-bg text-paw-accent' : 'bg-paw-raised text-paw-muted hover:text-paw-text'}`}
+                className={`flex items-center gap-2 px-5 h-10 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${tab === value ? 'bg-paw-surface text-paw-accent shadow-sm ring-1 ring-paw-border' : 'text-paw-faint hover:text-paw-muted'}`}
               >
-                {value === 'stdio' ? 'stdio' : value.toUpperCase()}
+                {value === 'stdio' ? <Zap size={14} /> : <Link2 size={14} />}
+                {value === 'stdio' ? 'STDIO' : value.toUpperCase()}
               </button>
             ))}
           </div>
 
-          <div className="space-y-4">
-            <label className="block">
-              <span className="label">Name</span>
-              <input className="input" value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Filesystem" />
-            </label>
+          <div className="grid gap-8">
+            <div className="space-y-6">
+              <label className="block space-y-2">
+                <span className="text-xs font-bold uppercase tracking-widest text-paw-faint">Node Identity</span>
+                <input className="input h-12 bg-paw-raised/30 border-paw-border focus:border-paw-accent" value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Memory Forge, Vector Oracle..." />
+              </label>
 
-            {tab === 'stdio' && (
-              <>
-                <label className="block">
-                  <span className="label">Command</span>
-                  <input className="input" value={command} onChange={(event) => setCommand(event.target.value)} placeholder='e.g. npx -y @modelcontextprotocol/server-filesystem /path' />
-                </label>
+              {tab === 'stdio' && (
+                <div className="space-y-6 animate-slide-up">
+                  <label className="block space-y-2">
+                    <span className="text-xs font-bold uppercase tracking-widest text-paw-faint">Execution Authority (Command)</span>
+                    <input className="input h-12 bg-paw-raised/30 font-mono text-sm" value={command} onChange={(event) => setCommand(event.target.value)} placeholder='npx -y @modelcontextprotocol/server-filesystem' />
+                  </label>
 
-                <div>
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="label mb-0">Args</span>
-                    <button type="button" className="btn-ghost px-2 py-1 text-xs" onClick={() => setArgs((current) => [...current, blankArg()])}>
-                      <Plus size={12} />
-                      Add arg
-                    </button>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-paw-border-subtle pb-2">
+                      <span className="text-xs font-bold uppercase tracking-widest text-paw-faint">Process Arguments</span>
+                      <button type="button" className="text-[10px] font-bold text-paw-accent hover:underline flex items-center gap-1" onClick={() => setArgs((current) => [...current, blankArg()])}>
+                        <Plus size={12} /> Add Argument
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      {args.map((row, index) => (
+                        <div key={row.id} className="flex items-center gap-3 animate-slide-in">
+                          <input className="input h-11 bg-paw-raised/20 font-mono text-xs" value={row.value} onChange={(event) => setArgs((current) => current.map((entry) => entry.id === row.id ? { ...entry, value: event.target.value } : entry))} placeholder={`Argument ${index + 1}`} />
+                          <button type="button" className="w-11 h-11 shrink-0 flex items-center justify-center rounded-xl bg-paw-raised/30 border border-paw-border hover:bg-paw-danger-bg hover:text-paw-danger hover:border-paw-danger/30 transition-all" onClick={() => setArgs((current) => current.length === 1 ? [blankArg()] : current.filter((entry) => entry.id !== row.id))}>
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    {args.map((row, index) => (
-                      <div key={row.id} className="flex items-center gap-2">
-                        <input className="input" value={row.value} onChange={(event) => setArgs((current) => current.map((entry) => entry.id === row.id ? { ...entry, value: event.target.value } : entry))} placeholder={`Argument ${index + 1}`} />
-                        <button type="button" className="btn-ghost h-11 w-11 justify-center p-0" onClick={() => setArgs((current) => current.length === 1 ? [blankArg()] : current.filter((entry) => entry.id !== row.id))}>
-                          <X size={14} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
 
-                <div>
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="label mb-0">Env Vars</span>
-                    <button type="button" className="btn-ghost px-2 py-1 text-xs" onClick={() => setEnvRows((current) => [...current, blankPair()])}>
-                      <Plus size={12} />
-                      Add env
-                    </button>
-                  </div>
-                  <div className="space-y-2">
-                    {envRows.map((row) => (
-                      <div key={row.id} className="grid gap-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_44px]">
-                        <input className="input" value={row.key} onChange={(event) => setEnvRows((current) => current.map((entry) => entry.id === row.id ? { ...entry, key: event.target.value } : entry))} placeholder="KEY" />
-                        <input className="input" value={row.value} onChange={(event) => setEnvRows((current) => current.map((entry) => entry.id === row.id ? { ...entry, value: event.target.value } : entry))} placeholder="value" />
-                        <button type="button" className="btn-ghost h-11 w-11 justify-center p-0" onClick={() => setEnvRows((current) => current.length === 1 ? [blankPair()] : current.filter((entry) => entry.id !== row.id))}>
-                          <X size={14} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {tab === 'sse' && (
-              <>
-                <label className="block">
-                  <span className="label">URL</span>
-                  <input className="input" value={url} onChange={(event) => setUrl(event.target.value)} placeholder="https://mcp.example.com/sse" />
-                </label>
-                <label className="block">
-                  <span className="label">Auth Token</span>
-                  <input className="input" value={authToken} onChange={(event) => setAuthToken(event.target.value)} placeholder="Optional bearer token" />
-                </label>
-              </>
-            )}
-
-            {tab === 'http' && (
-              <>
-                <label className="block">
-                  <span className="label">Base URL</span>
-                  <input className="input" value={url} onChange={(event) => setUrl(event.target.value)} placeholder="https://mcp.example.com" />
-                </label>
-                <div>
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="label mb-0">Headers</span>
-                    <button type="button" className="btn-ghost px-2 py-1 text-xs" onClick={() => setHeaderRows((current) => [...current, blankPair()])}>
-                      <Plus size={12} />
-                      Add header
-                    </button>
-                  </div>
-                  <div className="space-y-2">
-                    {headerRows.map((row) => (
-                      <div key={row.id} className="grid gap-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_44px]">
-                        <input className="input" value={row.key} onChange={(event) => setHeaderRows((current) => current.map((entry) => entry.id === row.id ? { ...entry, key: event.target.value } : entry))} placeholder="Header" />
-                        <input className="input" value={row.value} onChange={(event) => setHeaderRows((current) => current.map((entry) => entry.id === row.id ? { ...entry, value: event.target.value } : entry))} placeholder="Value" />
-                        <button type="button" className="btn-ghost h-11 w-11 justify-center p-0" onClick={() => setHeaderRows((current) => current.length === 1 ? [blankPair()] : current.filter((entry) => entry.id !== row.id))}>
-                          <X size={14} />
-                        </button>
-                      </div>
-                    ))}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-paw-border-subtle pb-2">
+                      <span className="text-xs font-bold uppercase tracking-widest text-paw-faint">Environment Overrides</span>
+                      <button type="button" className="text-[10px] font-bold text-paw-accent hover:underline flex items-center gap-1" onClick={() => setEnvRows((current) => [...current, blankPair()])}>
+                        <Plus size={12} /> Add Variable
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      {envRows.map((row) => (
+                        <div key={row.id} className="grid gap-3 md:grid-cols-[1fr_1fr_44px] animate-slide-in">
+                          <input className="input h-11 bg-paw-raised/20 font-mono text-xs uppercase" value={row.key} onChange={(event) => setEnvRows((current) => current.map((entry) => entry.id === row.id ? { ...entry, key: event.target.value } : entry))} placeholder="KEY" />
+                          <input className="input h-11 bg-paw-raised/20 font-mono text-xs" value={row.value} onChange={(event) => setEnvRows((current) => current.map((entry) => entry.id === row.id ? { ...entry, value: event.target.value } : entry))} placeholder="Value" />
+                          <button type="button" className="w-11 h-11 flex items-center justify-center rounded-xl bg-paw-raised/30 border border-paw-border hover:bg-paw-danger-bg hover:text-paw-danger hover:border-paw-danger/30 transition-all" onClick={() => setEnvRows((current) => current.length === 1 ? [blankPair()] : current.filter((entry) => entry.id !== row.id))}>
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </>
-            )}
-          </div>
+              )}
 
-          <div className="rounded-2xl border border-paw-border bg-paw-bg p-4">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-paw-faint">Popular MCPs</h3>
-              <span className="text-xs text-paw-faint">Quick add</span>
-            </div>
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-              {popularMcps.map((template) => (
-                <div key={template.name} className="rounded-xl border border-paw-border bg-paw-surface p-3">
-                  <div className="font-medium text-paw-text">{template.name}</div>
-                  <div className="mt-1 text-xs text-paw-muted">{template.description}</div>
-                  <button type="button" className="btn-ghost mt-3 px-2 py-1 text-xs text-paw-text" onClick={() => void createFromTemplate(template)}>
-                    <Plus size={12} />
-                    Add
-                  </button>
+              {tab === 'sse' && (
+                <div className="space-y-6 animate-slide-up">
+                  <label className="block space-y-2">
+                    <span className="text-xs font-bold uppercase tracking-widest text-paw-faint">SSE Stream Endpoint</span>
+                    <input className="input h-12 bg-paw-raised/30" value={url} onChange={(event) => setUrl(event.target.value)} placeholder="https://mcp.instance.io/sse" />
+                  </label>
+                  <label className="block space-y-2">
+                    <span className="text-xs font-bold uppercase tracking-widest text-paw-faint">Identity Token (Bearer)</span>
+                    <input className="input h-12 bg-paw-raised/30" type="password" value={authToken} onChange={(event) => setAuthToken(event.target.value)} placeholder="Optional security token..." />
+                  </label>
                 </div>
-              ))}
+              )}
+
+              {tab === 'http' && (
+                <div className="space-y-6 animate-slide-up">
+                  <label className="block space-y-2">
+                    <span className="text-xs font-bold uppercase tracking-widest text-paw-faint">Remote Root URL</span>
+                    <input className="input h-12 bg-paw-raised/30" value={url} onChange={(event) => setUrl(event.target.value)} placeholder="https://api.mcp-provider.com" />
+                  </label>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-paw-border-subtle pb-2">
+                      <span className="text-xs font-bold uppercase tracking-widest text-paw-faint">Custom Negotiated Headers</span>
+                      <button type="button" className="text-[10px] font-bold text-paw-accent hover:underline flex items-center gap-1" onClick={() => setHeaderRows((current) => [...current, blankPair()])}>
+                        <Plus size={12} /> Add Header
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      {headerRows.map((row) => (
+                        <div key={row.id} className="grid gap-3 md:grid-cols-[1fr_1fr_44px] animate-slide-in">
+                          <input className="input h-11 bg-paw-raised/20 font-mono text-xs" value={row.key} onChange={(event) => setHeaderRows((current) => current.map((entry) => entry.id === row.id ? { ...entry, key: event.target.value } : entry))} placeholder="Header-Key" />
+                          <input className="input h-11 bg-paw-raised/20 font-mono text-xs" value={row.value} onChange={(event) => setHeaderRows((current) => current.map((entry) => entry.id === row.id ? { ...entry, value: event.target.value } : entry))} placeholder="X-Value" />
+                          <button type="button" className="w-11 h-11 flex items-center justify-center rounded-xl bg-paw-raised/30 border border-paw-border hover:bg-paw-danger-bg hover:text-paw-danger hover:border-paw-danger/30 transition-all" onClick={() => setHeaderRows((current) => current.length === 1 ? [blankPair()] : current.filter((entry) => entry.id !== row.id))}>
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="flex justify-end gap-3">
-            <button type="button" className="btn-secondary" onClick={() => setModalOpen(false)}>
-              Cancel
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-paw-border-subtle mt-4">
+            <button type="button" className="h-11 px-6 rounded-xl font-bold text-xs uppercase tracking-widest text-paw-faint hover:text-paw-muted transition-colors" onClick={() => setModalOpen(false)}>
+              Discard
             </button>
-            <button type="button" className="btn-primary" onClick={() => void submit()} disabled={submitting}>
-              <Plus size={16} />
-              {submitting ? 'Saving...' : tab === 'stdio' ? 'Install & Test' : editing ? 'Save MCP' : 'Add MCP'}
+            <button type="button" className="h-11 px-8 rounded-xl bg-paw-accent text-white font-bold text-xs uppercase tracking-widest shadow-glow hover:bg-paw-accent-h active:scale-95 transition-all disabled:opacity-50" onClick={() => void submit()} disabled={submitting}>
+              {submitting ? 'Negotiating...' : editing ? 'Update Connection' : 'Establish Link'}
             </button>
           </div>
         </div>
       </Modal>
 
-      <Modal open={testOpen} onClose={() => setTestOpen(false)} title={testTarget ? `Test ${testTarget.name}` : 'Test MCP'}>
-        <div className="space-y-4">
+      <Modal open={testOpen} onClose={() => setTestOpen(false)} title={testTarget ? `Probe: ${testTarget.name}` : 'Node Analysis'}>
+        <div className="space-y-6">
           {testing ? (
-            <div className="space-y-2">
-              <div className="h-4 w-2/3 animate-pulse rounded bg-paw-raised" />
-              <div className="h-4 w-1/2 animate-pulse rounded bg-paw-raised" />
-              <div className="h-4 w-3/4 animate-pulse rounded bg-paw-raised" />
+            <div className="space-y-4 py-4">
+              <div className="flex items-center gap-3">
+                <div className="w-4 h-4 rounded-full border-2 border-paw-accent border-t-transparent animate-spin" />
+                <span className="text-sm font-bold text-paw-text tracking-tight">Initiating protocol handshake...</span>
+              </div>
+              <div className="space-y-2 pl-7">
+                <div className="h-2 w-full animate-pulse rounded bg-paw-raised" />
+                <div className="h-2 w-4/5 animate-pulse rounded bg-paw-raised" />
+                <div className="h-2 w-2/3 animate-pulse rounded bg-paw-raised" />
+              </div>
             </div>
           ) : testResult ? (
-            <>
-              <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium ${testResult.ok ? 'bg-paw-success-bg text-paw-success' : 'bg-paw-danger-bg text-paw-danger'}`}>
-                {testResult.ok ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
-                {testResult.ok ? 'Connection healthy' : 'Connection issue'}
-              </div>
-              <div className="rounded-xl border border-paw-border bg-paw-bg p-4 text-sm text-paw-muted">
-                <div className="mb-2 text-paw-text">{testResult.message ?? 'No message returned'}</div>
-                <div className="text-xs text-paw-faint">Response time: {testResult.responseTimeMs ?? 0}ms</div>
-              </div>
-              <div>
-                <div className="mb-2 text-sm font-semibold text-paw-text">Available tools</div>
-                <div className="flex flex-wrap gap-2">
-                  {(testResult.tools ?? []).map((tool) => (
-                    <span key={tool} className="badge bg-paw-raised text-paw-muted">
-                      {tool}
-                    </span>
-                  ))}
+            <div className="animate-slide-up space-y-6">
+              <div className={`p-4 rounded-2xl border flex items-center gap-4 ${testResult.ok ? 'bg-paw-success-bg border-paw-success/20' : 'bg-paw-danger-bg border-paw-danger/20'}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${testResult.ok ? 'bg-paw-success text-white' : 'bg-paw-danger text-white'}`}>
+                  {testResult.ok ? <CheckCircle2 size={24} /> : <AlertTriangle size={24} />}
+                </div>
+                <div>
+                  <div className={`text-sm font-bold ${testResult.ok ? 'text-paw-success' : 'text-paw-danger'}`}>
+                    {testResult.ok ? 'Handshake Successful' : 'Protocol Violation'}
+                  </div>
+                  <div className="text-xs text-paw-muted opacity-80 mt-0.5">{testResult.message ?? 'No additional diagnostics returned.'}</div>
                 </div>
               </div>
-            </>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-paw-raised/30 border border-paw-border rounded-2xl p-4">
+                  <div className="text-[10px] font-bold text-paw-faint uppercase tracking-widest mb-1">Latency</div>
+                  <div className="text-xl font-mono font-bold text-paw-text">{testResult.responseTimeMs ?? 0}<span className="text-xs ml-1 opacity-50">ms</span></div>
+                </div>
+                <div className="bg-paw-raised/30 border border-paw-border rounded-2xl p-4">
+                  <div className="text-[10px] font-bold text-paw-faint uppercase tracking-widest mb-1">Capabilities</div>
+                  <div className="text-xl font-mono font-bold text-paw-text">{(testResult.tools ?? []).length}</div>
+                </div>
+              </div>
+
+              {testResult.ok && (testResult.tools ?? []).length > 0 && (
+                <div className="space-y-3">
+                  <div className="text-xs font-bold uppercase tracking-widest text-paw-faint">Exposed Functions</div>
+                  <div className="grid gap-2 grid-cols-2">
+                    {(testResult.tools ?? []).map((tool) => (
+                      <div key={tool} className="flex items-center gap-2 bg-paw-surface border border-paw-border px-3 py-2 rounded-xl">
+                        <div className="w-1.5 h-1.5 rounded-full bg-paw-accent" />
+                        <span className="text-xs font-mono font-medium text-paw-text truncate">{tool}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <button type="button" className="btn-secondary w-full h-11 justify-center rounded-xl" onClick={() => setTestOpen(false)}>
+                Close Probe
+              </button>
+            </div>
           ) : (
-            <div className="text-sm text-paw-muted">No test result yet.</div>
+            <div className="text-center py-12 text-paw-faint">
+              <AlertTriangle size={32} className="mx-auto mb-4 opacity-10" />
+              <p className="text-sm font-bold uppercase tracking-widest">Diagnostic unavailable</p>
+            </div>
           )}
         </div>
       </Modal>

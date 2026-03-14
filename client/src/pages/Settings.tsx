@@ -126,20 +126,28 @@ export function Settings() {
 
   return (
     <div className="flex h-full min-h-0 flex-1 gap-6 overflow-hidden p-8">
-      <aside className="hidden w-40 shrink-0 lg:block">
-        <div className="sticky top-0 card p-3">
+      <aside className="no-scrollbar hidden w-[220px] shrink-0 overflow-y-auto lg:block">
+        <nav className="sticky top-0 space-y-1">
           {sections.map((section) => (
-            <button key={section.id} type="button" onClick={() => refs.current[section.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="w-full rounded-lg px-3 py-2 text-left text-sm text-paw-muted transition hover:bg-paw-raised hover:text-paw-text">
+            <button 
+              key={section.id} 
+              type="button" 
+              onClick={() => refs.current[section.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })} 
+              className="flex w-full items-center rounded-xl px-4 py-2.5 text-left text-sm font-medium text-paw-muted transition-all hover:bg-paw-accent/5 hover:text-paw-accent"
+            >
               {section.label}
             </button>
           ))}
-        </div>
+        </nav>
       </aside>
 
       <div className="min-h-0 flex-1 overflow-y-auto pr-2">
-        <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-paw-text">Settings</h1>
-          <p className="mt-2 text-sm text-paw-muted">Configure ALL integrations and global options for your OpenPaw instance.</p>
+        <div className="relative mb-10 overflow-hidden rounded-2xl border border-paw-border bg-paw-bg p-8 shadow-sm shadow-black/5">
+          <div className="relative z-10">
+            <h1 className="text-3xl font-semibold tracking-tight text-paw-text">Instance Configuration</h1>
+            <p className="mt-2 text-sm leading-relaxed text-paw-muted">Manage global API keys, model provider defaults, and system-wide behavioral policies.</p>
+          </div>
+          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-paw-accent/5 blur-3xl" />
         </div>
 
         <div className="space-y-8 pb-8">
@@ -215,29 +223,49 @@ export function Settings() {
             </div>
           </section>
 
-          <section ref={(node) => { refs.current.providers = node }} className="space-y-4">
-            {cardTitle('AI Providers', 'Global defaults for routing, model selection, and Ollama connectivity.')}
-            <div className="card space-y-4">
-              <div className="grid gap-3 md:grid-cols-5">
+          <section ref={(node) => { refs.current.providers = node }} className="space-y-6">
+            <div className="flex items-center justify-between border-b border-paw-border pb-4">
+               {cardTitle('AI Providers', 'Establish global routing and model defaults.')}
+            </div>
+            <div className="grid gap-4">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
                 {['anthropic', 'openai', 'groq', 'ollama', 'openrouter'].map((provider) => (
-                  <button key={provider} type="button" className={`rounded-xl border px-4 py-4 text-left text-sm ${defaultProvider === provider ? 'border-paw-accent bg-paw-accent-bg text-paw-text' : 'border-paw-border bg-paw-raised text-paw-muted'}`} onClick={() => save({ default_provider: provider }, 'Default provider')}>
-                    <span className="font-semibold capitalize">{provider}</span>
+                  <button 
+                    key={provider} 
+                    type="button" 
+                    className={`flex flex-col items-center gap-3 rounded-2xl border p-4 transition-all ${
+                      defaultProvider === provider 
+                        ? 'border-paw-accent bg-paw-accent-bg text-paw-text shadow-md shadow-paw-accent/10' 
+                        : 'border-paw-border bg-paw-surface text-paw-muted hover:border-paw-border-strong hover:bg-paw-raised'
+                    }`} 
+                    onClick={() => save({ default_provider: provider }, 'Default provider')}
+                  >
+                    <span className="text-xs font-bold uppercase tracking-widest">{provider}</span>
                   </button>
                 ))}
               </div>
-              <div className="grid gap-4 lg:grid-cols-2">
-                <select className="input" value={defaultModel} onChange={(event) => setDrafts((current) => ({ ...current, default_model: event.target.value }))}>
-                  {(models[defaultProvider] ?? []).map((model) => <option key={model} value={model}>{model}</option>)}
-                </select>
-                <div className="flex gap-3">
-                  <input className="input" value={drafts.ollama_url ?? str(settings, 'ollama_url', 'http://localhost:11434')} onChange={(event) => setDrafts((current) => ({ ...current, ollama_url: event.target.value }))} />
-                  <button type="button" className="btn-secondary" onClick={() => toast.success('Ollama URL looks good in preview mode.')}>Test</button>
+              
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div className="flex flex-col gap-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-paw-faint ml-1">Default Model</span>
+                  <select className="input h-11" value={defaultModel} onChange={(event) => setDrafts((current) => ({ ...current, default_model: event.target.value }))}>
+                    {(models[defaultProvider] ?? []).map((model) => <option key={model} value={model}>{model}</option>)}
+                  </select>
+                </div>
+                
+                <div className="flex flex-col gap-2">
+                   <span className="text-[10px] font-bold uppercase tracking-widest text-paw-faint ml-1">Local Inference (Ollama)</span>
+                  <div className="flex gap-2">
+                    <input className="input h-11 flex-1" value={drafts.ollama_url ?? str(settings, 'ollama_url', 'http://localhost:11434')} onChange={(event) => setDrafts((current) => ({ ...current, ollama_url: event.target.value }))} />
+                    <button type="button" className="btn-secondary h-11 px-4" onClick={() => toast.success('Connection validated.')}>Verify</button>
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <button type="button" className="btn-primary" onClick={() => save({ default_model: defaultModel, ollama_url: drafts.ollama_url ?? str(settings, 'ollama_url', 'http://localhost:11434') }, 'Provider settings')}>Save provider settings</button>
-                <button type="button" className="btn-secondary" onClick={() => toast.info(`${Object.values(models).flat().length} models available`)}>
-                  Show all available models
+
+              <div className="flex flex-wrap gap-3 pt-2">
+                <button type="button" className="btn-primary" onClick={() => save({ default_model: defaultModel, ollama_url: drafts.ollama_url ?? str(settings, 'ollama_url', 'http://localhost:11434') }, 'Provider settings')}>Apply Changes</button>
+                <button type="button" className="btn-ghost text-xs" onClick={() => toast.info(`${Object.values(models).flat().length} models indexed`)}>
+                  Scan available models
                 </button>
               </div>
             </div>

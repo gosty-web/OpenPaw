@@ -16,6 +16,7 @@ import { Dashboard } from './pages/Dashboard'
 import { Docs } from './pages/Docs'
 import { Import } from './pages/Import'
 import { Instances } from './pages/Instances'
+import { LearningMode } from './pages/LearningMode'
 import { MCPs } from './pages/MCPs'
 import { Settings } from './pages/Settings'
 import { Skills } from './pages/Skills'
@@ -39,13 +40,13 @@ function App() {
   }, [])
 
   return (
-    <div className="grid h-screen bg-paw-bg text-paw-text" style={{ gridTemplateColumns: 'auto minmax(0, 1fr)' }}>
+    <div className="flex h-screen overflow-hidden bg-paw-bg font-sans text-paw-text">
       <Sidebar connected={connected} collapsed={sidebarCollapsed} />
 
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <TopBar connected={connected} />
 
-        <div className="flex min-h-0 flex-1 flex-col overflow-auto">
+        <main className="relative min-h-0 flex-1 overflow-hidden">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/chat" element={<Chat />} />
@@ -58,13 +59,14 @@ function App() {
             <Route path="/mcps" element={<MCPs />} />
             <Route path="/skills" element={<Skills />} />
             <Route path="/cron" element={<CronJobs />} />
+            <Route path="/learning" element={<LearningMode />} />
             <Route path="/channels" element={<Channels />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/import" element={<Import />} />
             <Route path="/docs" element={<Docs />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </div>
+        </main>
       </div>
 
       <CommandPalette />

@@ -3,49 +3,42 @@ import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
 import { runMigrations } from './migrations.js'
-import { TABLE_COUNT } from './schema.js'
 import { seedDefaultSettings } from './seed.js'
+import { TABLE_COUNT } from './schema.js'
 
-let dbInstance: Database.Database | null = null
+let db: Database.Database | null = null
 
-function resolveDataDir() {
-  const configured = process.env.OPENPAW_DATA_DIR?.trim() || '~/.openpaw'
-
-  if (configured === '~/.openpaw') {
-    return path.join(os.homedir(), '.openpaw')
-  }
-
-  if (configured.startsWith('~/')) {
-    return path.join(os.homedir(), configured.slice(2))
-  }
-
-  return path.resolve(configured)
-}
-
+/**
+ * Returns the path to the OpenPaw data directory.
+ */
 export function getOpenPawDataDir() {
-  return resolveDataDir()
+  const dir = path.join(os.homedir(), '.openpaw')
+  fs.ensureDirSync(dir)
+  return dir
 }
 
+/**
+ * Initializes and returns the singleton SQLite database instance.
+ */
 export function getDb(): Database.Database {
-  if (dbInstance) {
-    return dbInstance
-  }
+  if (db) return db
 
-  const dataDir = resolveDataDir()
-  fs.ensureDirSync(dataDir)
-
+  const dataDir = getOpenPawDataDir()
   const dbPath = path.join(dataDir, 'openpaw.db')
-  const db = new Database(dbPath)
 
+  db = new Database(dbPath)
+  
+  // Enable WAL mode and foreign key constraints
   db.pragma('journal_mode = WAL')
   db.pragma('foreign_keys = ON')
 
+  console.log(`[DB] Connected: ${dbPath}`)
+
+  // Run migrations and seed data
   runMigrations(db)
   seedDefaultSettings(db)
 
-  console.log(`[DB] Connected: ${dbPath}`)
   console.log(`[DB] ${TABLE_COUNT} tables ready`)
 
-  dbInstance = db
-  return dbInstance
+  return db
 }

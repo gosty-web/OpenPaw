@@ -266,6 +266,14 @@ export interface VoiceOption {
   name: string
 }
 
+export interface LearningSession {
+  sessionId: string
+}
+
+export interface LearningTranscript {
+  text: string
+}
+
 type RequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown
 }
@@ -448,6 +456,8 @@ export const api = {
       content: string
       description?: string
     }) => request<Skill>('/skills/import', { method: 'POST', body: payload }),
+    attachToAgent: (agentId: string, skillId: string) =>
+      request<Skill>(`/skills/agent/${agentId}/attach/${skillId}`, { method: 'POST' }),
   },
   cron: {
     list: () => request<CronJob[]>('/cron'),
@@ -486,6 +496,15 @@ export const api = {
   voice: {
     voices: () => request<VoiceOption[]>('/voice/voices'),
     tts: (text: string) => request<{ ok: boolean; text: string; audioUrl: string | null; message: string }>('/voice/tts', { method: 'POST', body: { text } }),
+  },
+  learning: {
+    start: (agentId: string) => request<LearningSession>('/learning/start', { method: 'POST', body: { agentId } }),
+    frame: (payload: { sessionId: string; image: string; transcript?: string }) =>
+      request<{ ok: boolean }>('/learning/frame', { method: 'POST', body: payload }),
+    end: (payload: { sessionId: string; attachToAgent?: boolean }) =>
+      request<Skill>('/learning/end', { method: 'POST', body: payload }),
+    transcribe: (payload: { audioBase64: string; mimeType?: string }) =>
+      request<LearningTranscript>('/learning/transcribe', { method: 'POST', body: payload }),
   },
   imports: {
     openClaw: (payload: Record<string, unknown>) =>

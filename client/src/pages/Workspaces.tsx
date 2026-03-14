@@ -255,48 +255,59 @@ export function Workspaces() {
 
   return (
     <div className="min-h-0 flex h-full flex-1 flex-col overflow-hidden px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto mb-6 w-full max-w-7xl rounded-2xl border border-paw-border bg-gradient-to-br from-paw-surface via-paw-surface to-paw-raised/70 p-5">
-        <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-paw-accent-bg text-paw-accent">
-            <Users size={20} />
+      <div className="relative overflow-hidden rounded-2xl border border-paw-border bg-paw-surface p-6 shadow-sm shadow-black/5">
+        <div className="relative z-10 flex items-start gap-5">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-paw-accent/10 text-paw-accent">
+            <Users size={24} />
           </div>
           <div>
-            <h1 className="mb-2 text-[clamp(1.75rem,1.4rem+1vw,2.2rem)] font-semibold tracking-tight text-paw-text">Workspaces</h1>
-            <p className="max-w-4xl text-sm leading-7 text-paw-muted">Workspaces mirror real organizations. You can have an Engineering workspace with Frontend, Backend, and Testing agents, and a Marketing workspace. Agents in a workspace can collaborate on tasks via A2A protocol.</p>
+            <h1 className="text-2xl font-semibold tracking-tight text-paw-text">Workspaces</h1>
+            <p className="mt-1 max-w-4xl text-sm leading-relaxed text-paw-muted">Orchestrate multi-agent collaborations. Workspaces provide shared context and A2A coordination protocols for complex, cross-functional missions.</p>
           </div>
         </div>
+        <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-paw-accent/5 blur-3xl" />
       </div>
       <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col gap-4 xl:flex-row">
-        <aside className="flex shrink-0 flex-col overflow-hidden rounded-2xl border border-paw-border bg-paw-surface xl:w-[220px]">
-          <div className="border-b border-paw-border px-4 py-4">
-            <button type="button" className="btn-primary w-full justify-center" onClick={() => setCreateOpen(true)}>
+        <aside className="no-scrollbar flex shrink-0 flex-col overflow-hidden rounded-2xl border border-paw-border bg-paw-surface/50 xl:w-[260px]">
+          <div className="p-4">
+            <button type="button" className="btn-primary w-full justify-center shadow-lg shadow-paw-accent/20" onClick={() => setCreateOpen(true)}>
               <Plus size={16} />
               New Workspace
             </button>
           </div>
-          <div className="min-h-0 flex-1 overflow-y-auto p-3">
+          <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4">
             {loading ? (
-              <div className="space-y-3">
-                {Array.from({ length: 4 }, (_, index) => <div key={index} className="h-20 animate-pulse rounded-xl bg-paw-raised" />)}
+              <div className="space-y-2 px-2">
+                {Array.from({ length: 4 }, (_, index) => <div key={index} className="h-16 animate-pulse rounded-xl bg-paw-raised/50" />)}
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {workspaces.map((workspace) => {
                   const meta = workspaceTypeMeta(workspace.type)
                   const Icon = meta.icon
                   const selected = workspace.id === selectedWorkspaceId
                   return (
-                    <button key={workspace.id} type="button" className={`w-full rounded-xl border px-3 py-3 text-left transition ${selected ? 'border-paw-accent bg-paw-accent-bg/60' : 'border-transparent bg-paw-bg hover:border-paw-border hover:bg-paw-raised'}`} onClick={() => setSelectedWorkspaceId(workspace.id)}>
-                      <div className="mb-2 flex items-center gap-3">
-                        <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${selected ? 'bg-paw-accent text-white' : 'bg-paw-raised text-paw-muted'}`}>
-                          <Icon size={16} />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="truncate text-sm font-semibold text-paw-text">{workspace.name}</div>
-                          <div className="mt-1 inline-flex rounded-full bg-paw-raised px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] text-paw-faint">{meta.label}</div>
+                    <button 
+                      key={workspace.id} 
+                      type="button" 
+                      className={`group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all ${
+                        selected 
+                          ? 'bg-paw-accent text-white shadow-md shadow-paw-accent/20' 
+                          : 'text-paw-muted hover:bg-paw-raised hover:text-paw-text'
+                      }`} 
+                      onClick={() => setSelectedWorkspaceId(workspace.id)}
+                    >
+                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
+                        selected ? 'bg-white/20' : 'bg-paw-raised group-hover:bg-paw-border'
+                      }`}>
+                        <Icon size={14} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-xs font-semibold">{workspace.name}</div>
+                        <div className={`text-[10px] opacity-70 ${selected ? 'text-white' : 'text-paw-faint'}`}>
+                          {workspace.agentCount ?? workspace.members?.length ?? 0} agents
                         </div>
                       </div>
-                      <div className="text-xs text-paw-muted">{workspace.agentCount ?? workspace.members?.length ?? 0} agents</div>
                     </button>
                   )
                 })}
@@ -408,26 +419,34 @@ export function Workspaces() {
                     </div>
                   </section>
 
-                  <section className="rounded-2xl border border-paw-border bg-paw-bg p-4">
-                    <div className="mb-4">
-                      <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-paw-faint">Task Queue</h3>
-                      <p className="mt-1 text-sm text-paw-muted">See how work is flowing across the workspace at a glance.</p>
+                  <section className="rounded-2xl border border-paw-border bg-paw-bg/30 p-4">
+                    <div className="mb-6">
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-paw-faint">Sprint Status</h3>
+                      <p className="mt-1 text-sm text-paw-muted">Continuous A2A task flow monitoring.</p>
                     </div>
-                    <div className="grid gap-3 lg:grid-cols-3">
-                      {([['open', 'Open'], ['in_progress', 'In Progress'], ['completed', 'Completed']] as const).map(([key, label]) => (
-                        <div key={key} className="rounded-2xl border border-paw-border bg-paw-surface p-4">
-                          <div className="mb-3 flex items-center justify-between">
-                            <div className="text-sm font-semibold text-paw-text">{label}</div>
-                            <span className="badge bg-paw-raised text-paw-muted">{taskColumns[key].length}</span>
+                    <div className="grid gap-4 lg:grid-cols-3">
+                      {([['open', 'Pending'], ['in_progress', 'Active'], ['completed', 'Resolved']] as const).map(([key, label]) => (
+                        <div key={key} className="flex flex-col gap-3">
+                          <div className="flex items-center justify-between px-1">
+                            <span className="text-[10px] font-bold uppercase tracking-tighter text-paw-muted">{label}</span>
+                            <span className="text-[10px] font-mono text-paw-faint">{taskColumns[key].length}</span>
                           </div>
-                          <div className="space-y-2">
-                            {taskColumns[key].slice(0, 3).map((task) => (
-                              <div key={task.id} className="rounded-xl border border-paw-border bg-paw-bg px-3 py-2">
-                                <div className="text-sm font-medium text-paw-text">{task.title}</div>
-                                <div className="mt-1 text-xs text-paw-faint">{task.assigneeName ?? 'Awaiting assignment'}</div>
+                          <div className="min-h-[100px] space-y-2 rounded-xl border border-paw-border/50 bg-paw-surface/30 p-2">
+                            {taskColumns[key].slice(0, 4).map((task) => (
+                              <div key={task.id} className="rounded-lg border border-paw-border bg-paw-surface p-2.5 shadow-sm transition-all hover:border-paw-accent/20">
+                                <div className="line-clamp-2 text-xs font-medium text-paw-text">{task.title}</div>
+                                <div className="mt-2 flex items-center justify-between">
+                                  <div className="flex items-center gap-1.5 overflow-hidden">
+                                    {task.assigneeName && <AgentAvatar name={task.assigneeName} size="sm" />}
+                                    <span className="truncate text-[10px] text-paw-faint">{task.assigneeName ?? 'Unassigned'}</span>
+                                  </div>
+                                  <div className={`h-1.5 w-1.5 rounded-full ${priorityTone[task.priority ?? 'medium']}`} />
+                                </div>
                               </div>
                             ))}
-                            {taskColumns[key].length === 0 ? <div className="text-sm text-paw-faint">No tasks</div> : null}
+                            {taskColumns[key].length === 0 && (
+                              <div className="flex h-16 items-center justify-center text-[10px] text-paw-faint italic">Empty</div>
+                            )}
                           </div>
                         </div>
                       ))}

@@ -1,7 +1,4 @@
-import {
-  PanelLeftClose,
-  PanelLeftOpen,
-} from 'lucide-react'
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { navigationGroups } from '../lib/routes'
 import { useAppStore } from '../lib/store'
@@ -19,28 +16,26 @@ export function Sidebar({ connected, collapsed }: SidebarProps) {
       className="flex h-screen flex-col overflow-hidden border-r border-paw-border bg-paw-surface transition-[width] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]"
       style={{ width: collapsed ? 64 : 240 }}
     >
-      <div className="flex h-16 items-center gap-3 border-b border-paw-border px-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-paw-accent-bg text-lg text-paw-accent">
-          🐾
-        </div>
+      <div className="flex h-12 items-center gap-3 border-b border-paw-border-subtle px-4">
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-paw-accent text-sm text-white">🐾</div>
         {!collapsed && (
-          <div className="min-w-0 animate-fade-in">
-            <div className="text-sm font-semibold text-paw-text">OpenPaw</div>
-            <div className="text-xs text-paw-faint">v0.1.0</div>
-          </div>
+          <>
+            <div className="min-w-0 animate-fade-in text-sm font-semibold text-paw-text">OpenPaw</div>
+            <div className="ml-auto text-[10px] text-paw-faint">v0.1</div>
+          </>
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-4">
+      <div className="flex-1 overflow-y-auto py-4">
         {navigationGroups.map((group) => (
-          <div key={group.name} className="mb-6 last:mb-0">
+          <div key={group.name} className="mb-2 last:mb-0">
             {!collapsed && (
-              <div className="mb-2 px-3 text-[10px] font-medium uppercase tracking-[0.22em] text-paw-faint">
+              <div className="px-3 pb-1 pt-5 text-[10px] font-medium uppercase tracking-widest text-paw-faint">
                 {group.name}
               </div>
             )}
 
-            <nav className="space-y-1">
+            <nav className="space-y-0.5">
               {group.items.map((item) => {
                 const Icon = item.icon
 
@@ -52,16 +47,16 @@ export function Sidebar({ connected, collapsed }: SidebarProps) {
                     title={collapsed ? item.label : undefined}
                     className={({ isActive }) =>
                       [
-                        'flex h-10 items-center gap-3 overflow-hidden px-3 text-xs font-medium transition-colors duration-150',
-                        collapsed ? 'justify-center rounded-xl' : 'rounded-r-xl rounded-l-lg',
+                        'relative mx-2 my-0.5 flex h-9 items-center gap-3 overflow-hidden rounded-lg px-3 text-xs font-medium transition-colors duration-150',
+                        collapsed ? 'justify-center' : '',
                         isActive
-                          ? 'border-l-2 border-paw-accent bg-paw-accent-bg text-paw-accent'
-                          : 'border-l-2 border-transparent text-paw-muted hover:bg-paw-raised hover:text-paw-text',
+                          ? 'bg-paw-accent-bg text-paw-accent before:absolute before:-left-2 before:top-1/2 before:h-4 before:w-0.5 before:-translate-y-1/2 before:rounded-full before:bg-paw-accent'
+                          : 'text-paw-muted hover:bg-paw-raised hover:text-paw-text',
                       ].join(' ')
                     }
                   >
                     <Icon size={16} className="shrink-0" />
-                    {!collapsed && <span className="truncate">{item.label}</span>}
+                    {!collapsed && <span className="truncate text-xs font-medium">{item.label}</span>}
                   </NavLink>
                 )
               })}
@@ -70,19 +65,14 @@ export function Sidebar({ connected, collapsed }: SidebarProps) {
         ))}
       </div>
 
-      <div className="border-t border-paw-border px-3 py-3">
-        <div className={`mb-3 flex items-center ${collapsed ? 'justify-center' : 'justify-between gap-2 px-2'}`}>
-          <div
-            className={collapsed ? 'flex items-center justify-center' : 'flex items-center gap-2'}
-            title={collapsed ? (connected ? 'Server connected' : 'Server disconnected') : undefined}
-          >
+      <div className="mt-auto border-t border-paw-border-subtle px-3 pb-4 pt-4">
+        <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-2 px-0'}`}>
+          <div className={collapsed ? 'flex items-center justify-center' : 'flex items-center gap-2'}>
             <span
-              className={`h-2.5 w-2.5 rounded-full ${
-                connected ? 'bg-paw-success animate-pulse-soft' : 'bg-paw-danger'
-              }`}
+              className={`h-2 w-2 rounded-full ${connected ? 'bg-paw-success animate-pulse-soft' : 'bg-paw-danger'}`}
             />
             {!collapsed && (
-              <span className="text-xs text-paw-muted">{connected ? 'Server online' : 'Server offline'}</span>
+              <span className="text-xs text-paw-muted">{connected ? 'Connected' : 'Disconnected'}</span>
             )}
           </div>
         </div>
@@ -91,10 +81,9 @@ export function Sidebar({ connected, collapsed }: SidebarProps) {
           type="button"
           onClick={toggleSidebar}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className={`btn-ghost w-full ${collapsed ? 'justify-center px-0' : 'justify-start'}`}
+          className="btn-ghost mx-auto mt-4 flex h-8 w-8 items-center justify-center rounded-lg p-0"
         >
           {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
-          {!collapsed && <span>Collapse sidebar</span>}
         </button>
       </div>
     </aside>

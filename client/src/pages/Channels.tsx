@@ -4,7 +4,10 @@ import {
   AlertTriangle,
   Bot,
   CheckCircle2,
+  Copy,
   ExternalLink,
+  Eye,
+  EyeOff,
   Globe,
   Hash,
   Link2,
@@ -12,7 +15,6 @@ import {
   MessageSquare,
   QrCode,
   Smartphone,
-  Unplug,
   type LucideIcon,
 } from 'lucide-react'
 import { Modal } from '../components/Modal'
@@ -57,6 +59,14 @@ const channelMeta: Record<'telegram' | 'discord' | 'slack' | 'whatsapp' | 'web',
   },
 }
 
+const channelTone: Record<'telegram' | 'discord' | 'slack' | 'whatsapp' | 'web', string> = {
+  telegram: 'bg-blue-500/15 text-blue-400',
+  discord: 'bg-indigo-500/15 text-indigo-400',
+  slack: 'bg-amber-500/15 text-amber-400',
+  whatsapp: 'bg-paw-success/15 text-paw-success',
+  web: 'bg-paw-accent/15 text-paw-accent-h',
+}
+
 function defaultWebhookUrl() {
   if (typeof window === 'undefined') {
     return 'http://localhost:7411/webhooks/telegram'
@@ -69,7 +79,7 @@ function statusMeta(status?: Channel['status']) {
   if (status === 'connected') {
     return {
       label: 'Connected',
-      badge: 'bg-paw-success-bg text-paw-success border border-paw-success/20',
+      badge: 'bg-paw-success/15 text-paw-success border border-paw-success/25',
       dot: 'bg-paw-success',
       pulse: true,
     }
@@ -78,7 +88,7 @@ function statusMeta(status?: Channel['status']) {
   if (status === 'error') {
     return {
       label: 'Error',
-      badge: 'bg-paw-danger-bg text-paw-danger border border-paw-danger/20',
+      badge: 'bg-paw-danger/15 text-paw-danger border border-paw-danger/25',
       dot: 'bg-paw-danger',
       pulse: false,
     }
@@ -86,7 +96,7 @@ function statusMeta(status?: Channel['status']) {
 
   return {
     label: 'Not connected',
-    badge: 'bg-paw-raised text-paw-muted border border-paw-border',
+    badge: 'bg-paw-raised text-paw-faint border border-paw-border',
     dot: 'bg-paw-faint',
     pulse: false,
   }
@@ -168,18 +178,15 @@ function InstructionsCallout({ channelId }: { channelId: string }) {
           : 'WhatsApp pairing flow'
 
   return (
-    <div className="rounded-2xl border border-paw-border bg-paw-bg p-4">
-      <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-paw-text">
-        <Bot size={16} className="text-paw-accent" />
-        {title}
-      </div>
+    <div className="mb-5 rounded-xl border border-paw-border bg-paw-raised p-4">
+      <div className="mb-3 text-sm font-semibold text-paw-text">{title}</div>
       <div className="space-y-3">
         {steps.map((step, index) => (
-          <div key={step} className="flex items-start gap-3">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-paw-accent-bg text-xs font-semibold text-paw-accent">
+          <div key={step} className="flex items-start gap-2">
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-paw-accent text-xs font-bold text-white">
               {index + 1}
             </div>
-            <p className="text-sm leading-6 text-paw-muted">{step}</p>
+            <p className="text-sm text-paw-muted">{step}</p>
           </div>
         ))}
       </div>
@@ -246,6 +253,8 @@ export function Channels() {
   const [discordSkills, setDiscordSkills] = useState<AgentSkill[]>([])
   const [whatsappQr, setWhatsappQr] = useState<WhatsappQrResponse | null>(null)
   const [whatsappLoading, setWhatsappLoading] = useState(false)
+  const [showTelegramToken, setShowTelegramToken] = useState(false)
+  const [telegramTestResult, setTelegramTestResult] = useState<{ ok: boolean; message: string } | null>(null)
 
   useEffect(() => {
     Promise.all([api.channels.list(), api.agents.list()])
@@ -306,12 +315,14 @@ export function Channels() {
 
   const openModal = (channel: Channel) => {
     setModalChannelId(channel.id)
+    setTelegramTestResult(null)
   }
 
   const closeModal = () => {
     setModalChannelId(null)
     setDiscordSkills([])
     setWhatsappQr(null)
+    setTelegramTestResult(null)
   }
 
   const patchChannel = (updated: Channel) => {
@@ -411,6 +422,7 @@ export function Channels() {
     }
 
     setTesting(true)
+    setTelegramTestResult(null)
     try {
       const persisted = await api.channels.update('telegram', {
         enabled: true,
@@ -424,11 +436,23 @@ export function Channels() {
       })
       patchChannel(persisted)
       const result = await api.channels.test('telegram', { chatId: form.testChatId })
+      setTelegramTestResult({ ok: true, message: result.message })
       toast.success(result.message)
     } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to send Telegram test'
+      setTelegramTestResult({ ok: false, message })
       toast.error(error instanceof Error ? error.message : 'Unable to send Telegram test')
     } finally {
       setTesting(false)
+    }
+  }
+
+  const copyWebhook = async () => {
+    try {
+      await navigator.clipboard.writeText(form.webhookUrl)
+      toast.success('Webhook URL copied')
+    } catch {
+      toast.error('Unable to copy webhook URL')
     }
   }
 
@@ -489,8 +513,8 @@ export function Channels() {
                   ) : null}
                   <div className="relative z-10 flex h-full flex-col">
                     <div className="mb-4 flex items-start justify-between gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-paw-accent-bg text-paw-accent">
-                        <Icon size={20} />
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${channelTone[channel.id as keyof typeof channelTone]}`}>
+                        <Icon size={18} />
                       </div>
                       <span className={`inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-medium ${status.badge}`}>
                         <span className={`h-2 w-2 rounded-full ${status.dot} ${status.pulse ? 'animate-pulse-soft' : ''}`} />
@@ -547,15 +571,36 @@ export function Channels() {
             <InstructionsCallout channelId={modalChannel.id} />
 
             {modalChannel.id === 'telegram' ? (
-              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
-                <div className="space-y-4">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+                <div className="space-y-4 lg:border-r lg:border-paw-border lg:pr-6">
                   <label className="block">
                     <span className="label">Bot Token</span>
-                    <input className="input" value={form.botToken} onChange={(event) => setForm((current) => ({ ...current, botToken: event.target.value }))} placeholder="123456:telegram-bot-token" />
+                    <div className="relative">
+                      <input
+                        className="input pr-10"
+                        type={showTelegramToken ? 'text' : 'password'}
+                        value={form.botToken}
+                        onChange={(event) => setForm((current) => ({ ...current, botToken: event.target.value }))}
+                        placeholder="123456:telegram-bot-token"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowTelegramToken((current) => !current)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-paw-faint hover:text-paw-text"
+                        aria-label="Toggle bot token visibility"
+                      >
+                        {showTelegramToken ? <EyeOff size={14} /> : <Eye size={14} />}
+                      </button>
+                    </div>
                   </label>
                   <label className="block">
                     <span className="label">Webhook URL</span>
-                    <input className="input font-mono text-xs" value={form.webhookUrl} onChange={(event) => setForm((current) => ({ ...current, webhookUrl: event.target.value }))} />
+                    <div className="flex items-center gap-2">
+                      <input className="input font-mono text-xs text-paw-faint" value={form.webhookUrl} readOnly />
+                      <button type="button" className="btn-ghost h-9 w-9 justify-center p-0" onClick={() => void copyWebhook()}>
+                        <Copy size={14} />
+                      </button>
+                    </div>
                   </label>
                   <label className="block">
                     <span className="label">Agent</span>
@@ -570,22 +615,36 @@ export function Channels() {
                   </label>
                   <label className="block">
                     <span className="label">Allow List</span>
-                    <input className="input" value={form.allowList} onChange={(event) => setForm((current) => ({ ...current, allowList: event.target.value }))} placeholder="12345, 67890" />
+                    <input
+                      className="input"
+                      value={form.allowList}
+                      onChange={(event) => setForm((current) => ({ ...current, allowList: event.target.value }))}
+                      placeholder="12345, 67890 (leave blank for all)"
+                    />
                   </label>
                 </div>
 
-                <div className="rounded-2xl border border-paw-border bg-paw-bg p-4">
+                <div className="rounded-xl border border-paw-border bg-paw-raised p-4">
                   <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-paw-text">
-                    <CheckCircle2 size={16} className="text-paw-accent" />
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-paw-accent text-white">
+                      <CheckCircle2 size={12} />
+                    </span>
                     Send a test message
                   </div>
                   <label className="block">
                     <span className="label">Chat ID</span>
                     <input className="input" value={form.testChatId} onChange={(event) => setForm((current) => ({ ...current, testChatId: event.target.value }))} placeholder="Telegram chat ID" />
                   </label>
-                  <button type="button" className="btn-secondary mt-4 w-full justify-center" onClick={() => void testTelegram()} disabled={testing}>
-                    {testing ? 'Sending...' : 'Test'}
+                  <button type="button" className="btn-primary mt-4 w-full justify-center" onClick={() => void testTelegram()} disabled={testing}>
+                    {testing ? 'Sending...' : 'Send test'}
                   </button>
+                  {telegramTestResult ? (
+                    <div className="mt-3 rounded-lg border border-paw-border/50 bg-paw-surface p-3">
+                      <div className={`text-xs ${telegramTestResult.ok ? 'text-paw-success' : 'text-paw-danger'}`}>
+                        {telegramTestResult.message}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ) : null}

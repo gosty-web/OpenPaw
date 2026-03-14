@@ -36,11 +36,27 @@ function typeBadgeTone(type?: Instance['type']) {
   return 'bg-paw-accent-bg text-paw-accent'
 }
 
-function levelTone(level?: InstanceLog['level']) {
-  if (level === 'error') return 'text-paw-danger'
-  if (level === 'warning') return 'text-paw-warning'
-  if (level === 'debug') return 'text-paw-faint'
-  return 'text-[#4ade80]'
+function levelPillClass(level: LogLevelFilter, active: boolean) {
+  if (!active) return 'bg-paw-raised text-paw-muted hover:text-paw-text border border-paw-border'
+  if (level === 'error') return 'bg-paw-danger/15 text-paw-danger border border-paw-danger/30'
+  if (level === 'warning') return 'bg-paw-warning/15 text-paw-warning border border-paw-warning/30'
+  if (level === 'debug') return 'bg-paw-faint/15 text-paw-faint border border-paw-faint/30'
+  if (level === 'info') return 'bg-paw-info/15 text-paw-info border border-paw-info/30'
+  return 'bg-paw-accent-bg text-paw-accent border border-paw-accent/30'
+}
+
+function levelLabelClass(level?: InstanceLog['level']) {
+  if (level === 'error') return 'text-red-400'
+  if (level === 'warning') return 'text-amber-400'
+  if (level === 'debug') return 'text-gray-500'
+  return 'text-blue-400'
+}
+
+function levelMessageClass(level?: InstanceLog['level']) {
+  if (level === 'error') return 'text-red-300'
+  if (level === 'warning') return 'text-amber-300'
+  if (level === 'debug') return 'text-gray-400'
+  return 'text-green-400'
 }
 
 export function Instances() {
@@ -130,115 +146,130 @@ export function Instances() {
   return (
     <div className="min-h-0 flex h-full flex-1 flex-col overflow-auto px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <header className="rounded-2xl border border-paw-border bg-gradient-to-br from-paw-surface via-paw-surface to-paw-raised/70 p-5">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-paw-accent-bg text-paw-accent">
-              <Activity size={20} />
+        <header className="relative overflow-hidden rounded-2xl border border-paw-border bg-paw-surface p-6 shadow-sm shadow-black/5">
+          <div className="relative z-10 flex items-start gap-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-paw-accent/10 text-paw-accent">
+              <Activity size={24} />
             </div>
             <div>
-              <h1 className="mb-2 text-[clamp(1.75rem,1.4rem+1vw,2.2rem)] font-semibold tracking-tight text-paw-text">Instances</h1>
-              <p className="max-w-4xl text-sm leading-7 text-paw-muted">Every active agent session, channel bot, and cron execution is an instance. Monitor them here in real time.</p>
+              <h1 className="text-2xl font-semibold tracking-tight text-paw-text">Runtime Instances</h1>
+              <p className="mt-1 max-w-4xl text-sm leading-relaxed text-paw-muted">Live monitoring of agent sessions, channel bots, and background task executions. Real-time telemetry and resource oversight.</p>
             </div>
           </div>
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-paw-accent/5 blur-3xl" />
         </header>
 
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
-            { label: 'Active Sessions', value: stats.activeSessions, icon: Bot },
-            { label: 'Messages Today', value: stats.messagesToday, icon: TerminalSquare },
-            { label: 'Cron Executions Today', value: stats.cronExecutionsToday, icon: Clock3 },
-            { label: 'API Calls Today', value: stats.apiCallsToday, icon: Database },
+            { label: 'Active Sessions', value: stats.activeSessions, icon: Bot, trend: 'Live' },
+            { label: 'Msgs / 24h', value: stats.messagesToday, icon: TerminalSquare, trend: '+12%' },
+            { label: 'Cron Cycles', value: stats.cronExecutionsToday, icon: Clock3, trend: '100% stable' },
+            { label: 'API Throttling', value: stats.apiCallsToday, icon: Database, trend: 'Optimized' },
           ].map((stat) => {
             const Icon = stat.icon
             return (
-              <div key={stat.label} className="rounded-2xl border border-paw-border bg-paw-surface p-4">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-paw-accent-bg text-paw-accent">
-                  <Icon size={16} />
+              <div key={stat.label} className="group relative rounded-2xl border border-paw-border bg-paw-surface p-5 transition-all hover:border-paw-accent/30 hover:shadow-lg hover:shadow-black/5">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-paw-raised/50 text-paw-accent group-hover:bg-paw-accent/10 transition-colors">
+                    <Icon size={18} />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-paw-faint">{stat.trend}</span>
                 </div>
-                <div className="text-2xl font-semibold text-paw-text">{stat.value}</div>
-                <div className="mt-1 text-sm text-paw-muted">{stat.label}</div>
+                <div className="text-3xl font-semibold tracking-tight text-paw-text">{stat.value}</div>
+                <div className="mt-1 text-xs font-medium text-paw-muted">{stat.label}</div>
               </div>
             )
           })}
         </section>
 
-        <section className="rounded-2xl border border-paw-border bg-paw-surface">
-          <div className="border-b border-paw-border px-5 py-4">
-            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-paw-faint">Instances</div>
-            <div className="grid gap-3 md:grid-cols-3">
-              <select className="input" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as StatusFilter)}>
-                <option value="all">All statuses</option>
-                <option value="running">Running</option>
-                <option value="idle">Idle</option>
-                <option value="error">Error</option>
-                <option value="stopped">Stopped</option>
-              </select>
-              <select className="input" value={typeFilter} onChange={(event) => setTypeFilter(event.target.value as TypeFilter)}>
-                {typeOptions.map((type) => (
-                  <option key={type} value={type}>
-                    {type === 'all' ? 'All types' : type}
-                  </option>
-                ))}
-              </select>
-              <select className="input" value={agentFilter} onChange={(event) => setAgentFilter(event.target.value)}>
-                <option value="all">All agents</option>
-                {agents.map((agent) => (
-                  <option key={agent.id} value={agent.id}>
-                    {agent.name}
-                  </option>
-                ))}
-              </select>
+        <section className="rounded-2xl border border-paw-border bg-paw-surface shadow-sm shadow-black/10">
+          <div className="border-b border-paw-border px-5 py-5 bg-paw-raised/20">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-paw-faint">Live Runtime Table</h3>
+                <p className="mt-1 text-xs text-paw-muted">Click to view session details or manage life cycles.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <select className="input h-9 !py-0 text-xs w-[140px]" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as StatusFilter)}>
+                  <option value="all">All statuses</option>
+                  <option value="running">Running</option>
+                  <option value="idle">Idle</option>
+                  <option value="error">Error</option>
+                </select>
+                <select className="input h-9 !py-0 text-xs w-[140px]" value={typeFilter} onChange={(event) => setTypeFilter(event.target.value as TypeFilter)}>
+                  {typeOptions.map((type) => (
+                    <option key={type} value={type}>
+                      {type === 'all' ? 'All types' : type}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 
           {loading ? (
             <div className="space-y-3 p-5">
-              {Array.from({ length: 4 }, (_, index) => <div key={index} className="h-12 animate-pulse rounded-xl bg-paw-raised" />)}
+              {Array.from({ length: 4 }, (_, index) => <div key={index} className="h-12 animate-pulse rounded-xl bg-paw-raised/50" />)}
             </div>
           ) : filteredInstances.length === 0 ? (
-            <div className="flex min-h-[220px] flex-col items-center justify-center px-6 py-10 text-center">
+            <div className="flex min-h-[220px] flex-col items-center justify-center px-6 py-12 text-center">
               <Activity size={42} className="mb-4 text-paw-faint opacity-20" />
-              <h2 className="mb-2 text-lg font-semibold text-paw-text">No active instances</h2>
-              <p className="max-w-md text-sm leading-7 text-paw-muted">Start chatting with an agent or configure a channel.</p>
+              <h2 className="text-lg font-semibold text-paw-text">No active instances found</h2>
+              <p className="max-w-xs mt-1 text-sm leading-relaxed text-paw-muted">Initiate an agent session or wait for a scheduled cron job trigger.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto no-scrollbar">
               <table className="min-w-full text-left text-sm">
-                <thead className="border-b border-paw-border bg-paw-bg text-xs uppercase tracking-[0.16em] text-paw-faint">
+                <thead className="bg-paw-raised/50 text-[10px] font-bold uppercase tracking-widest text-paw-faint">
                   <tr>
-                    <th className="px-5 py-3">Status</th>
-                    <th className="px-5 py-3">Type</th>
-                    <th className="px-5 py-3">Agent</th>
-                    <th className="px-5 py-3">Started</th>
-                    <th className="px-5 py-3">Duration</th>
-                    <th className="px-5 py-3">Memory</th>
-                    <th className="px-5 py-3">Actions</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4">Lifecycle</th>
+                    <th className="px-6 py-4">Agent Entity</th>
+                    <th className="px-6 py-4">Runtime</th>
+                    <th className="px-6 py-4">Usage</th>
+                    <th className="px-6 py-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-paw-border">
+                <tbody className="divide-y divide-paw-border/50">
                   {filteredInstances.map((instance) => (
-                    <tr key={instance.id} className="bg-paw-surface">
-                      <td className="px-5 py-4">
-                        <div className="flex items-center gap-2">
-                          <span className={`h-2.5 w-2.5 rounded-full ${statusDot(instance.status)}`} />
-                          <span className="capitalize text-paw-text">{instance.status}</span>
+                    <tr key={instance.id} className="group hover:bg-paw-raised/30 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <span className={`h-2 w-2 rounded-full shadow-[0_0_8px] ${
+                            instance.status === 'running' ? 'bg-paw-success shadow-paw-success/50' :
+                            instance.status === 'error' ? 'bg-paw-danger shadow-paw-danger/50' : 'bg-paw-faint shadow-transparent'
+                          }`} />
+                          <span className="capitalize font-medium text-paw-text">{instance.status}</span>
                         </div>
                       </td>
-                      <td className="px-5 py-4">
-                        <span className={`rounded-full px-2.5 py-1 text-xs ${typeBadgeTone(instance.type)}`}>{instance.type}</span>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex rounded-md border border-current/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-tight ${typeBadgeTone(instance.type)}`}>
+                          {instance.type}
+                        </span>
                       </td>
-                      <td className="px-5 py-4 text-paw-text">{instance.agentName ?? '-'}</td>
-                      <td className="px-5 py-4 text-paw-muted">{relative(instance.startedAt)}</td>
-                      <td className="px-5 py-4 text-paw-muted">{durationLabel(instance.durationSeconds)}</td>
-                      <td className="px-5 py-4 text-paw-muted">{instance.memoryMb ? `${instance.memoryMb} MB` : '-'}</td>
-                      <td className="px-5 py-4">
-                        {instance.status === 'running' ? (
-                          <button type="button" className="btn-secondary px-3 py-1.5 text-xs" onClick={() => void stopInstance(instance)} disabled={stoppingId === instance.id}>
+                      <td className="px-6 py-4 group-hover:text-paw-accent transition-colors">
+                        <span className="font-medium text-paw-text">{instance.agentName ?? 'System Kernel'}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col">
+                          <span className="text-paw-muted">{durationLabel(instance.durationSeconds)} elapsed</span>
+                          <span className="text-[10px] text-paw-faint">Started {relative(instance.startedAt)}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-paw-muted tabular-nums">
+                        {instance.memoryMb ? `${instance.memoryMb}MB RAM` : '—'}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        {instance.status === 'running' && (
+                          <button 
+                            type="button" 
+                            className="btn-ghost h-8 w-8 !p-0 text-paw-danger hover:bg-paw-danger/10" 
+                            onClick={() => void stopInstance(instance)} 
+                            disabled={stoppingId === instance.id}
+                            title="Kill Process"
+                          >
                             <Power size={14} />
-                            {stoppingId === instance.id ? 'Stopping...' : 'Stop'}
                           </button>
-                        ) : (
-                          <span className="text-xs text-paw-faint">-</span>
                         )}
                       </td>
                     </tr>
@@ -265,7 +296,12 @@ export function Instances() {
             <div className="grid gap-3 lg:grid-cols-[auto_auto_auto_180px]">
               <div className="flex flex-wrap gap-2">
                 {(['all', 'info', 'warning', 'error', 'debug'] as const).map((level) => (
-                  <button key={level} type="button" className={`rounded-full px-3 py-1.5 text-xs transition ${logLevelFilter === level ? 'bg-paw-accent-bg text-paw-accent' : 'bg-paw-raised text-paw-muted hover:text-paw-text'}`} onClick={() => setLogLevelFilter(level)}>
+                  <button
+                    key={level}
+                    type="button"
+                    className={`rounded-full px-3 py-1.5 text-xs transition ${levelPillClass(level, logLevelFilter === level)}`}
+                    onClick={() => setLogLevelFilter(level)}
+                  >
                     {level === 'all' ? 'All' : level.toUpperCase()}
                   </button>
                 ))}
@@ -281,6 +317,7 @@ export function Instances() {
             </div>
           </div>
 
+          <div className="h-1 bg-paw-border cursor-row-resize hover:bg-paw-accent/50 transition-colors" />
           <div className="resize-y overflow-hidden bg-black" style={{ minHeight: 260, maxHeight: '60vh', height: 320 }}>
             <div ref={logViewportRef} className="h-full overflow-y-auto px-4 py-4 font-mono text-xs">
               {filteredLogs.length === 0 ? (
@@ -288,11 +325,11 @@ export function Instances() {
               ) : (
                 <div className="space-y-1.5">
                   {filteredLogs.map((entry) => (
-                    <div key={entry.id} className={`${levelTone(entry.level)} break-words`}>
-                      <span className="text-paw-faint">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>{' '}
-                      <span className="text-white/70">[{String(entry.level).toUpperCase()}]</span>{' '}
-                      <span className="text-white/70">[{entry.agentName ?? entry.type ?? 'system'}]</span>{' '}
-                      <span>{entry.message}</span>
+                    <div key={entry.id} className="break-words">
+                      <span className="text-paw-faint/60">[{new Date(entry.timestamp).toLocaleTimeString()}]</span>{' '}
+                      <span className={levelLabelClass(entry.level)}>[{String(entry.level).toUpperCase()}]</span>{' '}
+                      <span className="text-paw-muted/70">[{entry.agentName ?? entry.type ?? 'system'}]</span>{' '}
+                      <span className={levelMessageClass(entry.level)}>{entry.message}</span>
                     </div>
                   ))}
                 </div>

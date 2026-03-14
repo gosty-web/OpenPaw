@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Bot, Command, MessageSquare, Search, Settings as SettingsIcon } from 'lucide-react'
+import { Bot, Command, MessageSquare, Settings as SettingsIcon } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from '../lib/toast'
 import { commandRoutes } from '../lib/routes'
@@ -192,7 +192,7 @@ export function CommandPalette() {
   let absoluteIndex = -1
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 px-4 pt-[12vh] backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm">
       <button
         type="button"
         aria-label="Close command palette"
@@ -200,26 +200,26 @@ export function CommandPalette() {
         onClick={closeCmdPalette}
       />
 
-      <div className="relative z-10 w-full max-w-[560px] overflow-hidden rounded-2xl border border-paw-border-strong bg-paw-raised shadow-xl animate-slide-up">
-        <div className="flex items-center gap-3 border-b border-paw-border px-4 py-3">
-          <Search size={18} className="text-paw-faint" />
+      <div className="absolute left-1/2 top-[20%] w-[560px] -translate-x-1/2 overflow-hidden rounded-2xl border border-paw-border-strong bg-paw-surface shadow-2xl animate-slide-up">
+        <div className="border-b border-paw-border">
           <input
             ref={inputRef}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Type a command or search..."
-            className="w-full border-0 bg-transparent text-base text-paw-text outline-none placeholder:text-paw-faint"
+            className="w-full border-0 bg-transparent px-5 py-4 text-base text-paw-text outline-none placeholder:text-paw-faint"
           />
-          <div className="kbd">ESC</div>
         </div>
 
-        <div className="max-h-[420px] overflow-y-auto p-2">
+        <div className="max-h-80 overflow-y-auto py-2">
           {filteredCommands.length === 0 ? (
-            <div className="px-3 py-8 text-center text-sm text-paw-faint">No commands found.</div>
+            <div className="px-4 py-8 text-center text-sm text-paw-faint">
+              No results for &quot;{query.trim() || '...'}&quot;
+            </div>
           ) : (
             Object.entries(groupedCommands).map(([category, items]) => (
               <div key={category} className="mb-2 last:mb-0">
-                <div className="px-3 py-2 text-[10px] uppercase tracking-[0.22em] text-paw-faint">{category}</div>
+                <div className="px-5 py-1.5 text-[10px] uppercase tracking-wide text-paw-faint">{category}</div>
 
                 <div className="space-y-1">
                   {items.map((command) => {
@@ -231,25 +231,25 @@ export function CommandPalette() {
                         key={command.id}
                         type="button"
                         onClick={command.action}
-                        className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
-                          isSelected ? 'bg-paw-accent-bg text-paw-text' : 'text-paw-muted hover:bg-paw-overlay hover:text-paw-text'
+                        className={`mx-2 flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 text-left transition-colors ${
+                          isSelected ? 'bg-paw-raised text-paw-text' : 'text-paw-muted hover:bg-paw-raised hover:text-paw-text'
                         }`}
                       >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-paw-bg text-paw-faint">
+                        <div className="flex h-8 w-8 items-center justify-center text-paw-muted">
                           {command.category === 'ACTIONS' && command.name === 'Create Agent' ? (
-                            <Bot size={15} />
+                            <Bot size={16} />
                           ) : command.category === 'ACTIONS' && command.name === 'New Chat' ? (
-                            <MessageSquare size={15} />
+                            <MessageSquare size={16} />
                           ) : command.category === 'ACTIONS' ? (
-                            <SettingsIcon size={15} />
+                            <SettingsIcon size={16} />
                           ) : (
-                            <Command size={15} />
+                            <Command size={16} />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-sm font-medium text-paw-text">{highlightMatch(command.name, query)}</div>
-                          <div className="text-xs text-paw-faint">{command.category}</div>
+                          <div className="text-sm text-paw-text">{highlightMatch(command.name, query)}</div>
                         </div>
+                        <span className="text-xs text-paw-faint">{command.category}</span>
                       </button>
                     )
                   })}
@@ -257,6 +257,12 @@ export function CommandPalette() {
               </div>
             ))
           )}
+        </div>
+
+        <div className="flex items-center gap-4 border-t border-paw-border px-5 py-3 text-xs text-paw-faint">
+          <span>↑↓ navigate</span>
+          <span>↵ select</span>
+          <span>esc dismiss</span>
         </div>
       </div>
     </div>

@@ -501,7 +501,7 @@ export function Agents() {
 
         <section className="rounded-2xl border border-paw-border bg-paw-surface/80 p-4 shadow-sm">
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto_220px]">
-            <label className="relative block">
+            <label className="relative block w-full max-w-[320px]">
               <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-paw-faint" />
               <input
                 className="input pl-10"
@@ -519,9 +519,9 @@ export function Agents() {
                     key={option.value}
                     type="button"
                     onClick={() => setStatusFilter(option.value)}
-                    className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                       selected
-                        ? 'bg-paw-accent-bg text-paw-accent'
+                        ? 'bg-paw-accent-bg text-paw-accent border border-paw-accent/30'
                         : 'bg-paw-raised/60 text-paw-muted hover:bg-paw-raised hover:text-paw-text'
                     }`}
                   >
@@ -569,7 +569,7 @@ export function Agents() {
                   <div className="relative">
                     <div className="mb-4 flex items-start justify-between gap-4">
                       <div className="flex items-start gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-paw-accent-bg text-sm font-semibold text-paw-accent">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-paw-accent to-violet-700 text-sm font-semibold text-white">
                           {getInitials(agent.name)}
                         </div>
 
@@ -607,8 +607,8 @@ export function Agents() {
                           <span>Energy</span>
                           <span>{vitality.energy}%</span>
                         </div>
-                        <div className="h-[3px] rounded-full bg-paw-overlay">
-                          <div className="h-[3px] rounded-full bg-paw-warning" style={{ width: `${vitality.energy}%` }} />
+                        <div className="h-1.5 rounded-full bg-paw-raised">
+                          <div className="h-1.5 rounded-full bg-amber-400 transition-[width] duration-300" style={{ width: `${vitality.energy}%` }} />
                         </div>
                       </div>
                       <div className="space-y-1">
@@ -616,8 +616,8 @@ export function Agents() {
                           <span>Curiosity</span>
                           <span>{vitality.curiosity}%</span>
                         </div>
-                        <div className="h-[3px] rounded-full bg-paw-overlay">
-                          <div className="h-[3px] rounded-full bg-paw-info" style={{ width: `${vitality.curiosity}%` }} />
+                        <div className="h-1.5 rounded-full bg-paw-raised">
+                          <div className="h-1.5 rounded-full bg-blue-400 transition-[width] duration-300" style={{ width: `${vitality.curiosity}%` }} />
                         </div>
                       </div>
                       <div className="space-y-1">
@@ -625,8 +625,8 @@ export function Agents() {
                           <span>Satisfaction</span>
                           <span>{vitality.satisfaction}%</span>
                         </div>
-                        <div className="h-[3px] rounded-full bg-paw-overlay">
-                          <div className="h-[3px] rounded-full bg-paw-success" style={{ width: `${vitality.satisfaction}%` }} />
+                        <div className="h-1.5 rounded-full bg-paw-raised">
+                          <div className="h-1.5 rounded-full bg-paw-success transition-[width] duration-300" style={{ width: `${vitality.satisfaction}%` }} />
                         </div>
                       </div>
                       <div className="space-y-1">
@@ -634,32 +634,29 @@ export function Agents() {
                           <span>Motivation</span>
                           <span>{vitality.motivation}%</span>
                         </div>
-                        <div className="h-[3px] rounded-full bg-paw-overlay">
-                          <div className="h-[3px] rounded-full bg-paw-accent" style={{ width: `${vitality.motivation}%` }} />
+                        <div className="h-1.5 rounded-full bg-paw-raised">
+                          <div className="h-1.5 rounded-full bg-paw-accent transition-[width] duration-300" style={{ width: `${vitality.motivation}%` }} />
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
-                      <Link to={`/chat/${agent.id}`} className="btn-ghost px-3 py-2 text-xs text-paw-text">
+                    <div className="flex items-center gap-2 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+                      <Link to={`/chat/${agent.id}`} className="btn-ghost h-7 w-7 justify-center p-0" title="Chat">
                         <MessageSquare size={14} />
-                        Chat
                       </Link>
-                      <Link to={`/agents/${agent.id}/config`} className="btn-ghost px-3 py-2 text-xs text-paw-text">
+                      <Link to={`/agents/${agent.id}/config`} className="btn-ghost h-7 w-7 justify-center p-0" title="Config">
                         <Settings size={14} />
-                        Config
                       </Link>
-                      <Link to={`/agents/${agent.id}`} className="btn-ghost px-3 py-2 text-xs text-paw-text">
+                      <Link to={`/agents/${agent.id}`} className="btn-ghost h-7 w-7 justify-center p-0" title="View">
                         <Eye size={14} />
-                        View
                       </Link>
                       <button
                         type="button"
                         onClick={() => void handleDelete(agent)}
-                        className={`btn-ghost px-3 py-2 text-xs ${deleteArmed ? 'text-paw-danger hover:bg-paw-danger-bg hover:text-paw-danger' : 'text-paw-text'}`}
+                        className={`btn-ghost ml-auto h-7 w-7 justify-center p-0 ${deleteArmed ? 'text-paw-danger hover:bg-paw-danger-bg hover:text-paw-danger' : 'text-paw-faint hover:text-paw-danger'}`}
+                        title={deleteArmed ? 'Confirm delete' : 'Delete'}
                       >
                         <Trash2 size={14} />
-                        {deleteArmed ? 'Confirm' : 'Delete'}
                       </button>
                     </div>
                   </div>

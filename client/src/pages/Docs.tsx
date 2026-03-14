@@ -1,344 +1,213 @@
-import { useMemo, useRef, useState } from 'react'
+import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { BookOpen, Cpu, Files, HelpCircle, MessageSquare, Server, Settings, Terminal, Workflow } from 'lucide-react'
+import { clsx } from 'clsx'
 
-type DocSectionId =
-  | 'getting-started'
-  | 'core-concepts'
-  | 'agent-files'
-  | 'chat-interface'
-  | 'mcps-skills'
-  | 'cron-jobs'
-  | 'channels'
-  | 'api-reference'
-  | 'deployment'
-  | 'faq'
+const docsContent: Record<string, string> = {
+  'getting-started': `# Getting Started
 
-const docs: Array<{ id: DocSectionId; label: string; content: string }> = [
+Welcome to **OpenPaw**, the local-first agent orchestration platform. OpenPaw is designed to give you full control over your AI agents, their memories, and their workflows - all running locally on your machine.
+
+## Quick Setup
+1. **Initialize**: Run \`npm run setup\` in the root directory.
+2. **Launch**: Start the development environment with \`npm run dev\`.
+3. **Configure**: Visit \`/settings\` to add your API keys (OpenAI, Anthropic, etc.).
+`,
+  'core-concepts': `# Core Concepts
+
+OpenPaw represents a shift from AI services to AI sovereignty. Here is how the ecosystem works:
+
+### What is OpenPaw?
+OpenPaw is the next evolution of agent orchestration. While platforms like OpenClaw provided the foundation for agent files, OpenPaw expands this into a full multi-agent workspace with real-time streaming, long-term memory tiers, and local-first persistence.
+
+### Agent Files and Sovereignty
+In OpenPaw, an agent is not just a prompt. It is a collection of Markdown files that define its personality, memories, and growth. You own these files. You can edit them with any text editor, version control them with Git, or move them between OpenPaw instances.
+
+### A2A Protocol (Agent-to-Agent)
+Agents in OpenPaw do not just talk to you; they talk to each other. The A2A Protocol allows a lead agent to delegate tasks to specialist agents based on their skills and MCP capabilities.
+
+### Skills vs MCPs
+- **Skills**: Hard-coded or scripted capabilities that give agents specific tools (for example, web search or file access).
+- **MCPs**: Model Context Protocol servers that connect agents to external data and tools (for example, Google Drive or GitHub).
+`,
+  'agent-files': `# Agent Files
+
+The soul of an agent is defined across 8 core Markdown files. Understanding these is key to mastering OpenPaw.
+
+### 1. AGENTS.md
+Operating Instructions. This file contains the primary system prompts and behavioral constraints.
+
+### 2. SOUL.md
+Identity and Values. Where the personality lives.
+
+### 3. USER.md
+The User Model. The agent's evolving understanding of you.
+
+### 4. IDENTITY.md
+Immutable facts about the agent.
+
+### 5. MEMORY.md
+Long-term semantic memory.
+
+### 6. HEARTBEAT.md
+Proactive lifecycle tasks.
+
+### 7. GROWTH.md
+Learning log.
+
+### 8. BONDS.md
+Social graph for agent relationships.
+`,
+  'api-reference': `# API Reference
+
+The OpenPaw backend exposes a REST API for programmatic control of your agent workspace.
+
+| Endpoint | Method | Description |
+| --- | --- | --- |
+| \`/api/agents\` | GET | List all local agents |
+| \`/api/agents/:id\` | GET | Get full agent state and files |
+| \`/api/messages\` | POST | Send a message to an agent |
+| \`/api/sessions\` | GET | List chat sessions for an agent |
+| \`/api/import/openclaw\` | POST | Import OpenClaw export data |
+| \`/api/backup/create\` | POST | Trigger a full system backup |
+
+### Example Request
+\`\`\`json
+POST /api/messages
+{
+  "agentId": "agent-strategy",
+  "content": "Analyze the latest roadmap bets.",
+  "sessionId": "..."
+}
+\`\`\`
+`,
+  'default': `# Documentation
+Select a topic from the sidebar to learn more about building and orchestrating agents in OpenPaw.
+`,
+}
+
+const navGroups = [
   {
-    id: 'getting-started',
     label: 'Getting Started',
-    content: `# Getting Started
-
-OpenPaw is a local-first AI agent platform. Run the server, open the client, create your first agent, and start chatting.
-
-## First steps
-
-1. Start the root dev command
-2. Open the Dashboard
-3. Create an agent
-4. Start a conversation
-5. Attach skills, MCPs, channels, and cron jobs as needed
-`,
+    items: [
+      { id: 'getting-started', label: 'Getting Started', icon: BookOpen },
+      { id: 'core-concepts', label: 'Core Concepts', icon: Cpu },
+    ],
   },
   {
-    id: 'core-concepts',
     label: 'Core Concepts',
-    content: `# Core Concepts
-
-OpenPaw is a local-first AI agent platform focused on persistent identity, collaboration, and control. It takes inspiration from OpenClaw's agent architecture, but packages it into a simpler local product shell with explicit workspaces, channels, skills, MCPs, and cron-driven proactive behavior.
-
-## What OpenPaw is
-
-OpenPaw is the control plane for your local agents. It gives you a UI, storage, routing, files, chat, collaboration spaces, and integrations. The goal is to make agents feel like durable teammates, not disposable prompts.
-
-## How it relates to OpenClaw
-
-OpenClaw is the reference architecture. OpenPaw borrows the core idea that agents should have persistent files, stable identities, and a workspace-aware operating model. OpenPaw adds a polished local dashboard, structured management pages, and a productized shell around those ideas.
-
-## What agent files are
-
-Agent files are the persistent markdown files that define an agent's identity, behavior, and memory boundaries. They survive across sessions, so the agent can grow over time instead of reloading from scratch every time a chat opens.
-
-## What A2A protocol means here
-
-A2A stands for agent-to-agent collaboration. In OpenPaw, workspaces use A2A task flow so one agent can publish a task, others can bid, and the right specialist can take the job. It turns a flat list of agents into a working team.
-
-## Skills vs MCPs
-
-Skills are instruction files. They teach an agent how to approach a kind of task.
-
-MCPs are tools. They let an agent reach outside the model into files, browsers, APIs, databases, or external services.
-
-The short version:
-
-- Skills change how the agent thinks and works
-- MCPs change what the agent can access and do
-`,
+    items: [
+      { id: 'agent-files', label: 'Agent Files', icon: Files },
+      { id: 'chat-interface', label: 'Chat Interface', icon: MessageSquare },
+      { id: 'mcps-skills', label: 'MCPs and Skills', icon: Workflow },
+      { id: 'cron-jobs', label: 'Cron Jobs', icon: Terminal },
+      { id: 'channels', label: 'Channels', icon: Server },
+    ],
   },
   {
-    id: 'agent-files',
-    label: 'Agent Files',
-    content: `# Agent Files
-
-Every agent in OpenPaw has eight persistent markdown files. Together, they define identity, behavior, memory, and collaboration posture.
-
-## AGENTS.md
-
-Operating instructions for the agent. This is what the agent does on every session startup, how it behaves, what it reads first, how it uses tools, and how it should act in solo or group contexts.
-
-## SOUL.md
-
-Identity, personality, values, and communication style. This is the most human layer. It defines who the agent is, not just what it does.
-
-## USER.md
-
-Who the user is. This is the agent's working model of the person it helps: preferences, goals, style, projects, and context.
-
-## IDENTITY.md
-
-Immutable core facts about the agent such as name, creation date, and purpose. This file anchors continuity and should not be casually edited.
-
-## MEMORY.md
-
-Long-term curated memories. This file is intentionally sensitive and only loaded in main sessions so private context is not sprayed into every interaction.
-
-## HEARTBEAT.md
-
-Proactive task checklist. This tells the agent what to check during scheduled runs, what counts as worth reporting, and when to stay quiet.
-
-## GROWTH.md
-
-Learning log. This is where the agent tracks skills acquired, mistakes made, lessons learned, and areas it wants to improve next.
-
-## BONDS.md
-
-Relationship memory for other agents. It tracks who the agent knows, trust levels, collaboration history, and shared projects so group work feels coherent over time.
-`,
-  },
-  {
-    id: 'chat-interface',
-    label: 'Chat Interface',
-    content: `# Chat Interface
-
-The Chat page is the main working surface. The left rail shows agents and sessions. The right panel shows the conversation, markdown rendering, code blocks, and the sticky composer.
-
-Suggested prompts help start a fresh thread, while session history keeps prior conversations organized by agent.
-`,
-  },
-  {
-    id: 'mcps-skills',
-    label: 'MCPs & Skills',
-    content: `# MCPs & Skills
-
-## MCPs
-
-MCP connections give agents tool access. Typical MCPs include filesystem, GitHub, Postgres, browser automation, search, and memory services.
-
-## Skills
-
-Skills are reusable instruction sets, workflows, knowledge files, or personality layers. They can be created locally or imported from GitHub.
-`,
-  },
-  {
-    id: 'cron-jobs',
-    label: 'Cron Jobs',
-    content: `# Cron Jobs
-
-Cron jobs let agents run on a schedule. Good examples include daily summaries, inbox checks, feed monitoring, maintenance tasks, and recurring reports.
-`,
-  },
-  {
-    id: 'channels',
-    label: 'Channels',
-    content: `# Channels
-
-Channels connect agents to external messaging platforms like Telegram, Discord, Slack, WhatsApp, and the built-in web chat.
-`,
-  },
-  {
-    id: 'api-reference',
-    label: 'API Reference',
-    content: `# API Reference
-
-OpenPaw exposes a REST API under \`/api\`.
-
-## Health
-
-- \`GET /api/health\`
-
-## Agents
-
-- \`GET /api/agents\`
-- \`POST /api/agents\`
-- \`GET /api/agents/:id\`
-- \`PATCH /api/agents/:id\`
-- \`DELETE /api/agents/:id\`
-- \`GET /api/agents/:id/files\`
-- \`GET /api/agents/:id/files/:filename\`
-- \`PUT /api/agents/:id/files/:filename\`
-- \`GET /api/agents/:id/memory\`
-- \`POST /api/agents/:id/memory\`
-- \`DELETE /api/agents/:id/memory/:memoryId\`
-- \`GET /api/agents/:id/sessions\`
-- \`GET /api/agents/:id/sessions/:sessionId/messages\`
-- \`POST /api/agents/:id/chat\`
-- \`POST /api/agents/:id/stream\`
-- \`DELETE /api/agents/:id/sessions/:sessionId\`
-- \`POST /api/agents/:id/spawn\`
-
-## Workspaces
-
-- \`GET /api/workspaces\`
-- \`POST /api/workspaces\`
-- \`GET /api/workspaces/:id\`
-- \`PATCH /api/workspaces/:id\`
-- \`DELETE /api/workspaces/:id\`
-- \`POST /api/workspaces/:id/agents\`
-- \`DELETE /api/workspaces/:id/agents/:agentId\`
-- \`GET /api/workspaces/:id/tasks\`
-- \`POST /api/workspaces/:id/tasks\`
-- \`PATCH /api/workspaces/:id/tasks/:taskId\`
-
-## MCPs
-
-- \`GET /api/mcps\`
-- \`POST /api/mcps\`
-- \`PATCH /api/mcps/:id\`
-- \`DELETE /api/mcps/:id\`
-- \`POST /api/mcps/:id/test\`
-- \`POST /api/mcps/:id/toggle\`
-
-## Skills
-
-- \`GET /api/skills\`
-- \`POST /api/skills\`
-- \`PATCH /api/skills/:id\`
-- \`DELETE /api/skills/:id\`
-- \`POST /api/skills/import\`
-- \`POST /api/skills/:id/toggle\`
-
-## Cron
-
-- \`GET /api/cron\`
-- \`POST /api/cron\`
-- \`PATCH /api/cron/:id\`
-- \`DELETE /api/cron/:id\`
-- \`POST /api/cron/:id/run\`
-
-## Channels
-
-- \`GET /api/channels\`
-- \`PATCH /api/channels/:type\`
-- \`POST /api/channels/:type/toggle\`
-- \`GET /api/channels/whatsapp/qr\`
-- \`POST /api/channels/telegram/test\`
-
-## Instances
-
-- \`GET /api/instances\`
-- \`GET /api/instances/:id/logs\`
-
-## Settings and System
-
-- \`GET /api/settings\`
-- \`PATCH /api/settings\`
-- \`POST /api/settings/test/:provider\`
-- \`POST /api/system/restart\`
-- \`GET /api/providers/models\`
-- \`GET /api/voice/voices\`
-- \`POST /api/voice/tts\`
-
-## Import and Export
-
-- \`POST /api/import/openclaw\`
-- \`POST /api/export/all\`
-`,
-  },
-  {
-    id: 'deployment',
-    label: 'Deployment',
-    content: `# Deployment
-
-OpenPaw is designed for local-first development. In production-like setups, keep the server and client separate, protect API access with tokens, and route channels through the configured integrations.
-`,
-  },
-  {
-    id: 'faq',
-    label: 'FAQ',
-    content: `# FAQ
-
-## Is OpenPaw local-first?
-
-Yes. The platform is built around local files, local state, and local operator control.
-
-## Do I need MCPs to use it?
-
-No. Agents can still chat without MCPs, but MCPs are what give them real tools.
-
-## Can agents collaborate?
-
-Yes. Workspaces and A2A task flow are built for that.
-`,
+    label: 'Reference',
+    items: [
+      { id: 'api-reference', label: 'API Reference', icon: Settings },
+      { id: 'faq', label: 'FAQ', icon: HelpCircle },
+    ],
   },
 ]
 
 export function Docs() {
-  const [active, setActive] = useState<DocSectionId>('core-concepts')
-  const refs = useRef<Record<DocSectionId, HTMLElement | null>>({
-    'getting-started': null,
-    'core-concepts': null,
-    'agent-files': null,
-    'chat-interface': null,
-    'mcps-skills': null,
-    'cron-jobs': null,
-    channels: null,
-    'api-reference': null,
-    deployment: null,
-    faq: null,
-  })
-
-  const activeDoc = useMemo(() => docs.find((entry) => entry.id === active) ?? docs[0], [active])
+  const [activeTab, setActiveTab] = useState('core-concepts')
 
   return (
-    <div className="flex h-full min-h-0 flex-1 gap-6 overflow-hidden p-8">
-      <aside className="hidden w-44 shrink-0 lg:block">
-        <div className="sticky top-0 card p-3">
-          {docs.map((entry) => (
-            <button
-              key={entry.id}
-              type="button"
-              onClick={() => {
-                setActive(entry.id)
-                refs.current[entry.id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-              }}
-              className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${
-                active === entry.id ? 'bg-paw-accent-bg text-paw-accent' : 'text-paw-muted hover:bg-paw-raised hover:text-paw-text'
-              }`}
-            >
-              {entry.label}
-            </button>
+    <div className="flex h-full overflow-hidden bg-paw-bg">
+      <aside className="no-scrollbar w-[240px] shrink-0 overflow-y-auto border-r border-paw-border bg-paw-surface/50 backdrop-blur-md">
+        <div className="flex flex-col gap-8 p-6">
+          {navGroups.map((group) => (
+            <div key={group.label}>
+              <div className="mb-4 px-2 text-[10px] font-bold uppercase tracking-[0.15em] text-paw-faint/80">
+                {group.label}
+              </div>
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const Icon = item.icon
+                  const active = activeTab === item.id
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setActiveTab(item.id)}
+                      className={clsx(
+                        'group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200',
+                        active 
+                          ? 'bg-paw-accent/10 text-paw-accent shadow-sm' 
+                          : 'text-paw-muted hover:bg-paw-raised hover:text-paw-text'
+                      )}
+                    >
+                      <Icon size={16} className={clsx('transition-colors', active ? 'text-paw-accent' : 'text-paw-faint group-hover:text-paw-muted')} />
+                      {item.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           ))}
         </div>
       </aside>
 
-      <div className="min-h-0 flex-1 overflow-y-auto pr-2">
-        <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-paw-text">Docs</h1>
-          <p className="mt-2 text-sm text-paw-muted">Embedded markdown documentation for OpenPaw concepts, files, APIs, and workflows.</p>
+      <main className="flex-1 overflow-y-auto">
+        <div className="mx-auto max-w-4xl px-12 py-16">
+          <article className="prose prose-paw prose-invert max-w-none">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: (props) => <h1 className="text-4xl font-bold tracking-tight text-paw-text mb-8" {...props} />,
+                h2: (props) => <h2 className="text-2xl font-semibold tracking-tight text-paw-text mt-16 mb-6 pb-3 border-b border-paw-border/50" {...props} />,
+                h3: (props) => <h3 className="text-lg font-semibold text-paw-text mt-10 mb-4" {...props} />,
+                p: (props) => <p className="text-base text-paw-muted leading-relaxed mb-6" {...props} />,
+                ul: (props) => <ul className="my-6 space-y-3 list-none pl-0" {...props} />,
+                li: (props) => (
+                  <li className="flex items-start gap-3 text-sm text-paw-muted before:mt-2 before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-paw-accent/40" {...props} />
+                ),
+                a: (props) => <a className="font-semibold text-paw-accent no-underline hover:underline decoration-2 underline-offset-4" {...props} />,
+                code: ({ className, children, ...props }) => {
+                  const isBlock = Boolean(className)
+                  if (isBlock) {
+                    return (
+                      <div className="group relative my-8 overflow-hidden rounded-2xl border border-paw-border bg-paw-raised/30 shadow-2xl shadow-black/20">
+                        <div className="flex items-center justify-between border-b border-paw-border/50 bg-paw-raised/50 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-paw-faint">
+                          <span>{className?.replace('language-', '') || 'code'}</span>
+                          <Terminal size={12} />
+                        </div>
+                        <pre className="no-scrollbar overflow-x-auto p-6 text-xs leading-relaxed text-paw-text">
+                          <code className={clsx('font-mono', className)} {...props}>
+                            {children}
+                          </code>
+                        </pre>
+                      </div>
+                    )
+                  }
+                  return (
+                    <code className="rounded-md border border-paw-border bg-paw-raised/50 px-1.5 py-0.5 font-mono text-[13px] text-paw-accent/90" {...props}>
+                      {children}
+                    </code>
+                  )
+                },
+                blockquote: (props) => (
+                  <blockquote className="my-8 rounded-2xl border-l-[6px] border-paw-accent bg-paw-accent/5 px-8 py-6 italic shadow-sm" {...props} />
+                ),
+                table: (props) => (
+                  <div className="my-10 overflow-hidden rounded-2xl border border-paw-border bg-paw-surface shadow-md shadow-black/5">
+                    <table className="w-full text-left text-sm" {...props} />
+                  </div>
+                ),
+                th: (props) => <th className="bg-paw-raised/50 px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-paw-faint border-b border-paw-border/50" {...props} />,
+                td: (props) => <td className="px-6 py-4 border-b border-paw-border/30 text-paw-muted leading-relaxed" {...props} />,
+              }}
+            >
+              {docsContent[activeTab] || docsContent.default}
+            </ReactMarkdown>
+          </article>
         </div>
-
-        <div className="card prose prose-invert max-w-none border-paw-border bg-paw-surface/90 p-0">
-          {docs.map((entry) => (
-            <section key={entry.id} ref={(node) => { refs.current[entry.id] = node }} className="border-b border-paw-border px-8 py-8 last:border-b-0">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  h1: ({ children }) => <h2 className="mb-4 text-2xl font-semibold text-paw-text">{children}</h2>,
-                  h2: ({ children }) => <h3 className="mt-6 mb-3 text-lg font-semibold text-paw-text">{children}</h3>,
-                  p: ({ children }) => <p className="mb-4 text-sm leading-7 text-paw-muted">{children}</p>,
-                  li: ({ children }) => <li className="mb-2 text-sm leading-7 text-paw-muted">{children}</li>,
-                  code: ({ children }) => <code className="rounded bg-paw-raised px-1.5 py-0.5 font-mono text-xs text-paw-text">{children}</code>,
-                }}
-              >
-                {entry.content}
-              </ReactMarkdown>
-            </section>
-          ))}
-        </div>
-
-        <div className="mt-4 text-xs text-paw-faint">Currently focused: {activeDoc.label}</div>
-      </div>
+      </main>
     </div>
   )
 }

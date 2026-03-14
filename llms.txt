@@ -1,0 +1,25 @@
+# OpenPaw
+
+> Local-first AI agent orchestration platform.
+
+OpenPaw is a platform for building and managing AI agents with sovereign personality files, tiered memory systems, and multi-channel orchestration.
+
+## Core Components
+- **Client**: React 18 frontend with 16 pages (Agents, Skills, MCPs, Channels, Workspaces, etc.).
+- **Server**: Node.js backend with Agent Engine, Model Router, and SQLite persistence.
+- **Engines**: Voice (STT/TTS), Web Search, Browser Automation.
+- **Protocols**: MCP (Model Context Protocol), A2A (Agent-to-Agent).
+
+## Key Files
+- [README.md] (file:///c:/Users/USER/Desktop/OpenPaw/README.md): Project overview and setup.
+- [ARCHITECTURE.md] (file:///c:/Users/USER/Desktop/OpenPaw/ARCHITECTURE.md): Technical deep-dive.
+- [client/src/pages/]: Frontend page implementations.
+- [server/src/db/schema.ts]: Database structure.
+- [server/src/agents/AgentEngine.ts]: Core reasoning logic.
+
+## Capabilities
+- Multi-provider LLM support (Anthropic, OpenAI, Gemini, Ollama).
+- Tiered memory (Hot/Episodic/Semantic).
+- Channel bridges to Telegram, Discord, Slack, WhatsApp.
+- Scheduled autonomous tasks (Cron Jobs).
+- Hierarchical task orchestration in Workspaces.
