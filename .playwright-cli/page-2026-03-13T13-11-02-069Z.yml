@@ -1,0 +1,300 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🐾
+      - generic [ref=e7]:
+        - generic [ref=e8]: OpenPaw
+        - generic [ref=e9]: v0.1.0
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: MAIN
+        - navigation [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /
+            - img [ref=e15]
+            - generic [ref=e20]: Dashboard
+          - link "Chat" [ref=e21] [cursor=pointer]:
+            - /url: /chat
+            - img [ref=e22]
+            - generic [ref=e24]: Chat
+          - link "Agents" [ref=e25] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e26]
+            - generic [ref=e29]: Agents
+          - link "Workspaces" [ref=e30] [cursor=pointer]:
+            - /url: /workspaces
+            - img [ref=e31]
+            - generic [ref=e35]: Workspaces
+          - link "Instances" [ref=e36] [cursor=pointer]:
+            - /url: /instances
+            - img [ref=e37]
+            - generic [ref=e39]: Instances
+      - generic [ref=e40]:
+        - generic [ref=e41]: TOOLS
+        - navigation [ref=e42]:
+          - link "MCPs" [ref=e43] [cursor=pointer]:
+            - /url: /mcps
+            - img [ref=e44]
+            - generic [ref=e46]: MCPs
+          - link "Skills" [ref=e47] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e48]
+            - generic [ref=e50]: Skills
+          - link "Cron Jobs" [ref=e51] [cursor=pointer]:
+            - /url: /cron
+            - img [ref=e52]
+            - generic [ref=e55]: Cron Jobs
+          - link "Channels" [ref=e56] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e57]
+            - generic [ref=e63]: Channels
+      - generic [ref=e64]:
+        - generic [ref=e65]: SYSTEM
+        - navigation [ref=e66]:
+          - link "Settings" [ref=e67] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e68]
+            - generic [ref=e71]: Settings
+          - link "Import" [ref=e72] [cursor=pointer]:
+            - /url: /import
+            - img [ref=e73]
+            - generic [ref=e76]: Import
+          - link "Docs" [ref=e77] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e78]
+            - generic [ref=e80]: Docs
+    - generic [ref=e81]:
+      - generic [ref=e85]: Server offline
+      - button "Collapse sidebar" [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - generic [ref=e90]: Collapse sidebar
+  - generic [ref=e91]:
+    - banner [ref=e92]:
+      - heading "Workspaces" [level=1] [ref=e94]
+      - generic [ref=e95]:
+        - generic [ref=e96]: ⌘K
+        - generic [ref=e100]: Disconnected
+    - generic [ref=e102]:
+      - generic [ref=e104]:
+        - img [ref=e106]
+        - generic [ref=e111]:
+          - heading "Workspaces" [level=1] [ref=e112]
+          - paragraph [ref=e113]: Workspaces mirror real organizations. You can have an Engineering workspace with Frontend, Backend, and Testing agents, and a Marketing workspace. Agents in a workspace can collaborate on tasks via A2A protocol.
+      - generic [ref=e114]:
+        - complementary [ref=e115]:
+          - button "New Workspace" [active] [ref=e117] [cursor=pointer]:
+            - img [ref=e118]
+            - text: New Workspace
+          - generic [ref=e120]:
+            - button "Engineering Team 3 agents" [ref=e121] [cursor=pointer]:
+              - generic [ref=e122]:
+                - img [ref=e124]
+                - generic [ref=e128]:
+                  - generic [ref=e129]: Engineering
+                  - generic [ref=e130]: Team
+              - generic [ref=e131]: 3 agents
+            - button "Growth Division 2 agents" [ref=e132] [cursor=pointer]:
+              - generic [ref=e133]:
+                - img [ref=e135]
+                - generic [ref=e138]:
+                  - generic [ref=e139]: Growth
+                  - generic [ref=e140]: Division
+              - generic [ref=e141]: 2 agents
+            - button "Launch Lab Project 2 agents" [ref=e142] [cursor=pointer]:
+              - generic [ref=e143]:
+                - img [ref=e145]
+                - generic [ref=e147]:
+                  - generic [ref=e148]: Launch Lab
+                  - generic [ref=e149]: Project
+              - generic [ref=e150]: 2 agents
+        - generic [ref=e152]:
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - heading "Engineering" [level=2] [ref=e155]
+              - generic [ref=e156]: Team
+            - generic [ref=e157]:
+              - generic [ref=e158]:
+                - img [ref=e159]
+                - text: Description
+              - textbox [ref=e162]: Frontend, backend, and reliability agents collaborating on product delivery.
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - generic [ref=e166]:
+                - generic [ref=e167]:
+                  - heading "Team Members" [level=3] [ref=e168]
+                  - paragraph [ref=e169]: Assign specialists to this workspace and define how they participate.
+                - button "Add Agent" [ref=e170] [cursor=pointer]:
+                  - img [ref=e171]
+                  - text: Add Agent
+              - generic [ref=e172]:
+                - generic [ref=e173]:
+                  - button "Remove Pixel Builder" [ref=e174] [cursor=pointer]:
+                    - img [ref=e175]
+                  - generic [ref=e178]:
+                    - generic [ref=e179]: PB
+                    - generic [ref=e180]:
+                      - generic [ref=e181]: Pixel Builder
+                      - generic [ref=e182]: Frontend engineer
+                  - generic [ref=e183]:
+                    - generic [ref=e184]: Frontend Lead
+                    - generic [ref=e185]: Working
+                - generic [ref=e187]:
+                  - button "Remove Ops Relay" [ref=e188] [cursor=pointer]:
+                    - img [ref=e189]
+                  - generic [ref=e192]:
+                    - generic [ref=e193]: OR
+                    - generic [ref=e194]:
+                      - generic [ref=e195]: Ops Relay
+                      - generic [ref=e196]: Infrastructure operator
+                  - generic [ref=e197]:
+                    - generic [ref=e198]: Reliability
+                    - generic [ref=e199]: Thinking
+                - generic [ref=e201]:
+                  - button "Remove Nova Strategy" [ref=e202] [cursor=pointer]:
+                    - img [ref=e203]
+                  - generic [ref=e206]:
+                    - generic [ref=e207]: NS
+                    - generic [ref=e208]:
+                      - generic [ref=e209]: Nova Strategy
+                      - generic [ref=e210]: Product strategist
+                  - generic [ref=e211]:
+                    - generic [ref=e212]: Product Partner
+                    - generic [ref=e213]: Online
+            - generic [ref=e215]:
+              - generic [ref=e216]:
+                - heading "Context" [level=3] [ref=e217]
+                - paragraph [ref=e218]: This is what all agents in this workspace know about the team's goals and rules.
+              - textbox [ref=e219]: "# WORKSPACE_CONTEXT.md Engineering owns product delivery quality. - Ship in small reviewable slices - Prefer local-first tooling - Use A2A task handoffs when a specialist can accelerate delivery"
+              - button "Save Context" [ref=e221] [cursor=pointer]
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - heading "Task Queue" [level=3] [ref=e224]
+                - paragraph [ref=e225]: See how work is flowing across the workspace at a glance.
+              - generic [ref=e226]:
+                - generic [ref=e227]:
+                  - generic [ref=e228]:
+                    - generic [ref=e229]: Open
+                    - generic [ref=e230]: "1"
+                  - generic [ref=e232]:
+                    - generic [ref=e233]: Document shell layout contracts
+                    - generic [ref=e234]: Awaiting assignment
+                - generic [ref=e235]:
+                  - generic [ref=e236]:
+                    - generic [ref=e237]: In Progress
+                    - generic [ref=e238]: "1"
+                  - generic [ref=e240]:
+                    - generic [ref=e241]: Stabilize chat streaming polish
+                    - generic [ref=e242]: Pixel Builder
+                - generic [ref=e243]:
+                  - generic [ref=e244]:
+                    - generic [ref=e245]: Completed
+                    - generic [ref=e246]: "1"
+                  - generic [ref=e248]:
+                    - generic [ref=e249]: Close dev server cleanup loop
+                    - generic [ref=e250]: Ops Relay
+        - complementary [ref=e251]:
+          - generic [ref=e252]:
+            - generic [ref=e253]:
+              - heading "Tasks" [level=3] [ref=e254]
+              - button "New Task" [ref=e255] [cursor=pointer]:
+                - img [ref=e256]
+                - text: New Task
+            - generic [ref=e257]:
+              - button "All" [ref=e258] [cursor=pointer]
+              - button "Open" [ref=e259] [cursor=pointer]
+              - button "In Progress" [ref=e260] [cursor=pointer]
+              - button "Completed" [ref=e261] [cursor=pointer]
+          - generic [ref=e263]:
+            - generic [ref=e264]:
+              - generic [ref=e265]: Publish a task
+              - generic [ref=e266]:
+                - textbox "Task title" [ref=e267]
+                - textbox "Describe the outcome and constraints" [ref=e268]
+                - textbox "Required skills, comma separated" [ref=e269]
+                - generic [ref=e270]:
+                  - button "low" [ref=e271] [cursor=pointer]
+                  - button "medium" [ref=e272] [cursor=pointer]
+                  - button "high" [ref=e273] [cursor=pointer]
+                - button "Publish" [ref=e274] [cursor=pointer]
+            - button "Stabilize chat streaming polish Tighten message rendering and edge-state handling before the next demo. In Progress PB Pixel Builder" [ref=e276] [cursor=pointer]:
+              - generic [ref=e278]:
+                - generic [ref=e279]: Stabilize chat streaming polish
+                - generic [ref=e280]: Tighten message rendering and edge-state handling before the next demo.
+              - generic [ref=e282]:
+                - generic [ref=e283]: In Progress
+                - generic [ref=e284]:
+                  - generic [ref=e285]: PB
+                  - generic [ref=e286]: Pixel Builder
+            - button "Document shell layout contracts Capture scroll and sizing rules so future pages inherit the correct behavior. Open No winner yet" [ref=e288] [cursor=pointer]:
+              - generic [ref=e290]:
+                - generic [ref=e291]: Document shell layout contracts
+                - generic [ref=e292]: Capture scroll and sizing rules so future pages inherit the correct behavior.
+              - generic [ref=e294]:
+                - generic [ref=e295]: Open
+                - generic [ref=e297]: No winner yet
+            - button "Close dev server cleanup loop Make sure verification runs do not leave orphan processes behind. Completed OR Ops Relay" [ref=e299] [cursor=pointer]:
+              - generic [ref=e301]:
+                - generic [ref=e302]: Close dev server cleanup loop
+                - generic [ref=e303]: Make sure verification runs do not leave orphan processes behind.
+              - generic [ref=e305]:
+                - generic [ref=e306]: Completed
+                - generic [ref=e307]:
+                  - generic [ref=e308]: OR
+                  - generic [ref=e309]: Ops Relay
+      - generic [ref=e310]:
+        - button "Close modal" [ref=e311]
+        - generic [ref=e312]:
+          - generic [ref=e313]:
+            - heading "New Workspace" [level=2] [ref=e314]
+            - button "Close modal" [ref=e315] [cursor=pointer]:
+              - img [ref=e316]
+          - generic [ref=e320]:
+            - generic [ref=e321]:
+              - generic [ref=e322]:
+                - generic [ref=e323]: Name
+                - textbox "Name" [ref=e324]:
+                  - /placeholder: Engineering, Marketing, Launch Lab
+              - generic [ref=e325]:
+                - generic [ref=e326]: Description
+                - textbox "Description" [ref=e327]:
+                  - /placeholder: Describe what this workspace is responsible for.
+            - generic [ref=e328]:
+              - generic [ref=e329]: Type
+              - generic [ref=e330]:
+                - button "Organization High-level coordination across multiple functions." [ref=e331] [cursor=pointer]:
+                  - img [ref=e333]
+                  - generic [ref=e337]: Organization
+                  - generic [ref=e338]: High-level coordination across multiple functions.
+                - button "Division A discipline or business area with shared goals." [ref=e339] [cursor=pointer]:
+                  - img [ref=e341]
+                  - generic [ref=e344]: Division
+                  - generic [ref=e345]: A discipline or business area with shared goals.
+                - button "Team A delivery team with tightly shared execution context." [ref=e346] [cursor=pointer]:
+                  - img [ref=e348]
+                  - generic [ref=e352]: Team
+                  - generic [ref=e353]: A delivery team with tightly shared execution context.
+                - button "Project A temporary strike team for a focused mission." [ref=e354] [cursor=pointer]:
+                  - img [ref=e356]
+                  - generic [ref=e358]: Project
+                  - generic [ref=e359]: A temporary strike team for a focused mission.
+            - generic [ref=e360]:
+              - generic [ref=e361]: Initial Agents
+              - generic [ref=e362]:
+                - button "NS Nova Strategy Product strategist" [ref=e363] [cursor=pointer]:
+                  - generic [ref=e364]: NS
+                  - generic [ref=e365]:
+                    - generic [ref=e366]: Nova Strategy
+                    - generic [ref=e367]: Product strategist
+                - button "PB Pixel Builder Frontend engineer" [ref=e368] [cursor=pointer]:
+                  - generic [ref=e369]: PB
+                  - generic [ref=e370]:
+                    - generic [ref=e371]: Pixel Builder
+                    - generic [ref=e372]: Frontend engineer
+                - button "OR Ops Relay Infrastructure operator" [ref=e373] [cursor=pointer]:
+                  - generic [ref=e374]: OR
+                  - generic [ref=e375]:
+                    - generic [ref=e376]: Ops Relay
+                    - generic [ref=e377]: Infrastructure operator
+            - generic [ref=e378]:
+              - button "Cancel" [ref=e379] [cursor=pointer]
+              - button "Create" [ref=e380] [cursor=pointer]

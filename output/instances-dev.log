@@ -1,0 +1,20 @@
+
+> openpaw@0.1.0 dev
+> concurrently -n "SERVER,CLIENT" -c "#7c3aed,#10b981" "npm run dev --prefix server" "npm run dev --prefix client"
+
+[SERVER] 
+[SERVER] > @openpaw/server@0.1.0 dev
+[SERVER] > tsx watch src/index.ts
+[SERVER] 
+[CLIENT] 
+[CLIENT] > @openpaw/client@0.1.0 dev
+[CLIENT] > vite
+[CLIENT] 
+[CLIENT] 
+[CLIENT]   [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m1745[22m[2m[0m ms[22m
+[CLIENT] 
+[CLIENT]   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[CLIENT] [2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[SERVER] OpenPaw server -> http://localhost:7411
+[SERVER] [Socket] connected: 640_RiLjX6NbHDZzAAAB
+[SERVER] npm run dev --prefix server exited with code 1

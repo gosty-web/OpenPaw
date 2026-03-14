@@ -1,0 +1,155 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🐾
+      - generic [ref=e7]:
+        - generic [ref=e8]: OpenPaw
+        - generic [ref=e9]: v0.1.0
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: MAIN
+        - navigation [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /
+            - img [ref=e15]
+            - generic [ref=e20]: Dashboard
+          - link "Chat" [ref=e21] [cursor=pointer]:
+            - /url: /chat
+            - img [ref=e22]
+            - generic [ref=e24]: Chat
+          - link "Agents" [ref=e25] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e26]
+            - generic [ref=e29]: Agents
+          - link "Workspaces" [ref=e30] [cursor=pointer]:
+            - /url: /workspaces
+            - img [ref=e31]
+            - generic [ref=e35]: Workspaces
+          - link "Instances" [ref=e36] [cursor=pointer]:
+            - /url: /instances
+            - img [ref=e37]
+            - generic [ref=e39]: Instances
+      - generic [ref=e40]:
+        - generic [ref=e41]: TOOLS
+        - navigation [ref=e42]:
+          - link "MCPs" [ref=e43] [cursor=pointer]:
+            - /url: /mcps
+            - img [ref=e44]
+            - generic [ref=e46]: MCPs
+          - link "Skills" [ref=e47] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e48]
+            - generic [ref=e50]: Skills
+          - link "Cron Jobs" [ref=e51] [cursor=pointer]:
+            - /url: /cron
+            - img [ref=e52]
+            - generic [ref=e55]: Cron Jobs
+          - link "Channels" [ref=e56] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e57]
+            - generic [ref=e63]: Channels
+      - generic [ref=e64]:
+        - generic [ref=e65]: SYSTEM
+        - navigation [ref=e66]:
+          - link "Settings" [ref=e67] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e68]
+            - generic [ref=e71]: Settings
+          - link "Import" [ref=e72] [cursor=pointer]:
+            - /url: /import
+            - img [ref=e73]
+            - generic [ref=e76]: Import
+          - link "Docs" [ref=e77] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e78]
+            - generic [ref=e80]: Docs
+    - generic [ref=e81]:
+      - generic [ref=e85]: Server offline
+      - button "Collapse sidebar" [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - generic [ref=e90]: Collapse sidebar
+  - generic [ref=e91]:
+    - banner [ref=e92]:
+      - heading "Cron Jobs" [level=1] [ref=e94]
+      - generic [ref=e95]:
+        - generic [ref=e96]: ⌘K
+        - generic [ref=e100]: Disconnected
+    - generic [ref=e102]:
+      - generic [ref=e103]:
+        - banner [ref=e104]:
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - heading "Cron Jobs" [level=1] [ref=e107]
+              - generic [ref=e108]: 0 jobs
+            - paragraph [ref=e109]: Keep agents running useful work in the background with a clear schedule and observable run history.
+          - button "Create Job" [active] [ref=e110] [cursor=pointer]:
+            - img [ref=e111]
+            - text: Create Job
+        - generic [ref=e113]:
+          - img [ref=e115]
+          - paragraph [ref=e118]: Cron jobs let your agents do things on a schedule - check emails, send reports, monitor feeds, run maintenance tasks - without you having to ask.
+        - generic [ref=e120]:
+          - img [ref=e121]
+          - heading "No scheduled tasks" [level=3] [ref=e124]
+          - paragraph [ref=e125]: Create your first cron job to put routine monitoring, reports, and maintenance on autopilot.
+      - generic [ref=e126]:
+        - button "Close modal" [ref=e127]
+        - generic [ref=e128]:
+          - generic [ref=e129]:
+            - heading "Create Job" [level=2] [ref=e130]
+            - button "Close modal" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - generic [ref=e138]: What
+              - generic [ref=e139]:
+                - generic [ref=e140]: Job Name
+                - textbox "Job Name" [ref=e141]
+              - generic [ref=e142]:
+                - generic [ref=e143]: Description
+                - textbox "Description" [ref=e144]
+              - generic [ref=e145]:
+                - generic [ref=e146]: Assign to agent
+                - button "Select an agent" [ref=e147] [cursor=pointer]:
+                  - generic [ref=e148]: Select an agent
+                  - img [ref=e149]
+              - generic [ref=e152]:
+                - generic [ref=e153]: Task Prompt
+                - textbox "Task Prompt" [ref=e154]
+            - generic [ref=e155]:
+              - generic [ref=e156]: When
+              - generic [ref=e157]:
+                - button "Every 15 min" [ref=e158] [cursor=pointer]
+                - button "Every hour" [ref=e159] [cursor=pointer]
+                - button "Daily" [ref=e160] [cursor=pointer]
+                - button "Weekly" [ref=e161] [cursor=pointer]
+                - button "Custom" [ref=e162] [cursor=pointer]
+              - generic [ref=e163]:
+                - generic [ref=e164]: Timezone
+                - combobox "Timezone" [ref=e165]:
+                  - option "Africa/Lagos" [selected]
+                  - option "UTC"
+                  - option "America/New_York"
+                  - option "America/Los_Angeles"
+                  - option "Europe/London"
+                  - option "Europe/Berlin"
+                  - option "Asia/Tokyo"
+            - generic [ref=e166]:
+              - generic [ref=e167]: Options
+              - generic [ref=e168]:
+                - generic [ref=e169]:
+                  - generic [ref=e170]: Max retries on failure
+                  - spinbutton "Max retries on failure" [ref=e171]: "2"
+                - generic [ref=e172]:
+                  - generic [ref=e173]: Timeout minutes
+                  - spinbutton "Timeout minutes" [ref=e174]: "10"
+              - button "Notify on failure Send the result to a channel when the job fails. Off" [ref=e176] [cursor=pointer]:
+                - generic [ref=e177]:
+                  - generic [ref=e178]: Notify on failure
+                  - generic [ref=e179]: Send the result to a channel when the job fails.
+                - generic [ref=e180]: "Off"
+            - generic [ref=e181]:
+              - button "Cancel" [ref=e182] [cursor=pointer]
+              - button "Create Job" [ref=e183] [cursor=pointer]:
+                - img [ref=e184]
+                - text: Create Job

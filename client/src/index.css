@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: #09090b;
+  color: #fafafa;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+::selection { background: rgba(124,58,237,0.3); color: #fafafa; }
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: -200%;
+  width: 400%;
+  height: 400%;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grainMove 0.5s steps(2) infinite;
+}
+
+@keyframes grainMove {
+  0%,100% { transform: translate(0,0); }
+  10% { transform: translate(-2%,-4%); }
+  30% { transform: translate(1%,-6%); }
+  50% { transform: translate(4%,3%); }
+  70% { transform: translate(3%,1%); }
+  90% { transform: translate(-1%,3%); }
+}
+
+:focus-visible {
+  outline: 2px solid rgba(124,58,237,0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@layer base {
+  html, body, #root {
+    min-height: 100%;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-lg bg-paw-accent px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-paw-accent-h active:bg-paw-accent-d disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 rounded-lg border border-paw-border bg-transparent px-4 py-2 text-sm font-medium text-paw-muted transition-colors duration-150 hover:border-paw-border-strong hover:text-paw-text;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-paw-muted transition-colors duration-150 hover:bg-paw-raised hover:text-paw-text;
+  }
+
+  .card {
+    @apply rounded-xl border border-paw-border bg-paw-surface p-5;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-paw-border bg-paw-raised px-3 py-2 text-sm text-paw-text transition-colors placeholder:text-paw-faint focus:border-paw-accent-h focus:outline-none;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wide text-paw-muted;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+
+  .kbd {
+    @apply inline-flex items-center rounded border border-paw-border bg-paw-raised px-1.5 py-0.5 font-mono text-xs text-paw-muted;
+  }
+}
+
+.status-idle { color: #71717a; }
+.status-thinking { color: #f59e0b; }
+.status-working { color: #3b82f6; }
+.status-sleeping { color: #71717a; }
+.status-error { color: #ef4444; }
+.status-online { color: #22c55e; }
+
+#toast-root {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.cm-editor {
+  background: transparent !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+}
+
+.cm-editor .cm-content {
+  padding: 16px !important;
+}
+
+.cm-editor.cm-focused {
+  outline: none !important;
+}
+
+.cm-gutters {
+  background: transparent !important;
+  border-right: 1px solid rgba(255,255,255,0.06) !important;
+}

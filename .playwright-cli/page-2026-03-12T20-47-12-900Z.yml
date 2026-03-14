@@ -1,0 +1,281 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 🐾
+        - generic [ref=e7]:
+          - generic [ref=e8]: OpenPaw
+          - generic [ref=e9]: v0.1.0
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - generic [ref=e12]: MAIN
+          - navigation [ref=e13]:
+            - link "Dashboard" [ref=e14] [cursor=pointer]:
+              - /url: /
+              - img [ref=e15]
+              - generic [ref=e20]: Dashboard
+            - link "Chat" [ref=e21] [cursor=pointer]:
+              - /url: /chat
+              - img [ref=e22]
+              - generic [ref=e24]: Chat
+            - link "Agents" [ref=e25] [cursor=pointer]:
+              - /url: /agents
+              - img [ref=e26]
+              - generic [ref=e29]: Agents
+            - link "Workspaces" [ref=e30] [cursor=pointer]:
+              - /url: /workspaces
+              - img [ref=e31]
+              - generic [ref=e35]: Workspaces
+            - link "Instances" [ref=e36] [cursor=pointer]:
+              - /url: /instances
+              - img [ref=e37]
+              - generic [ref=e39]: Instances
+        - generic [ref=e40]:
+          - generic [ref=e41]: TOOLS
+          - navigation [ref=e42]:
+            - link "MCPs" [ref=e43] [cursor=pointer]:
+              - /url: /mcps
+              - img [ref=e44]
+              - generic [ref=e46]: MCPs
+            - link "Skills" [ref=e47] [cursor=pointer]:
+              - /url: /skills
+              - img [ref=e48]
+              - generic [ref=e50]: Skills
+            - link "Cron Jobs" [ref=e51] [cursor=pointer]:
+              - /url: /cron
+              - img [ref=e52]
+              - generic [ref=e55]: Cron Jobs
+            - link "Channels" [ref=e56] [cursor=pointer]:
+              - /url: /channels
+              - img [ref=e57]
+              - generic [ref=e63]: Channels
+        - generic [ref=e64]:
+          - generic [ref=e65]: SYSTEM
+          - navigation [ref=e66]:
+            - link "Settings" [ref=e67] [cursor=pointer]:
+              - /url: /settings
+              - img [ref=e68]
+              - generic [ref=e71]: Settings
+            - link "Import" [ref=e72] [cursor=pointer]:
+              - /url: /import
+              - img [ref=e73]
+              - generic [ref=e76]: Import
+            - link "Docs" [ref=e77] [cursor=pointer]:
+              - /url: /docs
+              - img [ref=e78]
+              - generic [ref=e80]: Docs
+      - generic [ref=e81]:
+        - generic [ref=e85]: Server offline
+        - button "Collapse sidebar" [ref=e86] [cursor=pointer]:
+          - img [ref=e87]
+          - generic [ref=e90]: Collapse sidebar
+    - generic [ref=e91]:
+      - banner [ref=e92]:
+        - heading "Agents" [level=1] [ref=e94]
+        - generic [ref=e95]:
+          - generic [ref=e96]: ⌘K
+          - generic [ref=e100]: Disconnected
+      - generic [ref=e103]:
+        - banner [ref=e104]:
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - heading "Agents" [level=1] [ref=e107]
+              - generic [ref=e108]: 4 agents
+            - paragraph [ref=e109]: Manage your AI team, tune provider settings, and jump straight into the right conversation or configuration view.
+          - button "New Agent" [ref=e110] [cursor=pointer]:
+            - img [ref=e111]
+            - text: New Agent
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - img
+            - textbox [ref=e115]:
+              - /placeholder: Search by agent name or role
+          - generic [ref=e116]:
+            - button "All" [ref=e117] [cursor=pointer]
+            - button "Idle" [ref=e118] [cursor=pointer]
+            - button "Active" [ref=e119] [cursor=pointer]
+            - button "Sleeping" [ref=e120] [cursor=pointer]
+          - generic [ref=e121]:
+            - img [ref=e122]
+            - combobox [ref=e123]:
+              - option "Name A-Z"
+              - option "Created (newest)" [selected]
+              - option "Created (oldest)"
+        - generic [ref=e124]:
+          - article [ref=e364]:
+            - generic [ref=e365]:
+              - generic [ref=e366]:
+                - generic [ref=e367]:
+                  - generic [ref=e368]: AO
+                  - generic [ref=e369]:
+                    - button "Atlas Ops" [ref=e370] [cursor=pointer]
+                    - paragraph [ref=e371]: Release Manager
+                - generic [ref=e373]: Idle
+              - generic [ref=e375]:
+                - generic [ref=e376]:
+                  - generic [ref=e377]: OpenAI
+                  - generic [ref=e378]: Idle
+                - paragraph [ref=e380]: gpt-4o
+              - generic [ref=e381]:
+                - generic [ref=e383]:
+                  - generic [ref=e384]: Energy
+                  - generic [ref=e385]: 84%
+                - generic [ref=e389]:
+                  - generic [ref=e390]: Curiosity
+                  - generic [ref=e391]: 66%
+                - generic [ref=e395]:
+                  - generic [ref=e396]: Satisfaction
+                  - generic [ref=e397]: 70%
+                - generic [ref=e401]:
+                  - generic [ref=e402]: Motivation
+                  - generic [ref=e403]: 70%
+              - generic [ref=e406]:
+                - link "Chat" [ref=e407] [cursor=pointer]:
+                  - /url: /chat/atlas-ops
+                  - img [ref=e408]
+                  - text: Chat
+                - link "Config" [ref=e410] [cursor=pointer]:
+                  - /url: /agents/atlas-ops/config
+                  - img [ref=e411]
+                  - text: Config
+                - link "View" [ref=e414] [cursor=pointer]:
+                  - /url: /agents/atlas-ops
+                  - img [ref=e415]
+                  - text: View
+                - button "Delete" [ref=e418] [cursor=pointer]:
+                  - img [ref=e419]
+                  - text: Delete
+          - article [ref=e125]:
+            - generic [ref=e126]:
+              - generic [ref=e127]:
+                - generic [ref=e128]:
+                  - generic [ref=e129]: OR
+                  - generic [ref=e130]:
+                    - button "Ops Relay" [ref=e131] [cursor=pointer]
+                    - paragraph [ref=e132]: Infrastructure operator
+                - generic [ref=e134]: Thinking
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - generic [ref=e138]: Groq
+                  - generic [ref=e139]: Thinking
+                - paragraph [ref=e141]: llama-3.3-70b
+              - generic [ref=e142]:
+                - generic [ref=e144]:
+                  - generic [ref=e145]: Energy
+                  - generic [ref=e146]: 78%
+                - generic [ref=e150]:
+                  - generic [ref=e151]: Curiosity
+                  - generic [ref=e152]: 84%
+                - generic [ref=e156]:
+                  - generic [ref=e157]: Satisfaction
+                  - generic [ref=e158]: 78%
+                - generic [ref=e162]:
+                  - generic [ref=e163]: Motivation
+                  - generic [ref=e164]: 60%
+              - generic [ref=e167]:
+                - link "Chat" [ref=e168] [cursor=pointer]:
+                  - /url: /chat/agent-ops
+                  - img [ref=e169]
+                  - text: Chat
+                - link "Config" [ref=e171] [cursor=pointer]:
+                  - /url: /agents/agent-ops/config
+                  - img [ref=e172]
+                  - text: Config
+                - link "View" [ref=e175] [cursor=pointer]:
+                  - /url: /agents/agent-ops
+                  - img [ref=e176]
+                  - text: View
+                - button "Delete" [ref=e179] [cursor=pointer]:
+                  - img [ref=e180]
+                  - text: Delete
+          - article [ref=e183]:
+            - generic [ref=e184]:
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - generic [ref=e187]: PB
+                  - generic [ref=e188]:
+                    - button "Pixel Builder" [ref=e189] [cursor=pointer]
+                    - paragraph [ref=e190]: Frontend engineer
+                - generic [ref=e192]: Working
+              - generic [ref=e194]:
+                - generic [ref=e195]:
+                  - generic [ref=e196]: OpenAI
+                  - generic [ref=e197]: Working
+                - paragraph [ref=e199]: gpt-4.1
+              - generic [ref=e200]:
+                - generic [ref=e202]:
+                  - generic [ref=e203]: Energy
+                  - generic [ref=e204]: 83%
+                - generic [ref=e208]:
+                  - generic [ref=e209]: Curiosity
+                  - generic [ref=e210]: 75%
+                - generic [ref=e214]:
+                  - generic [ref=e215]: Satisfaction
+                  - generic [ref=e216]: 51%
+                - generic [ref=e220]:
+                  - generic [ref=e221]: Motivation
+                  - generic [ref=e222]: 79%
+              - generic [ref=e225]:
+                - link "Chat" [ref=e226] [cursor=pointer]:
+                  - /url: /chat/agent-builder
+                  - img [ref=e227]
+                  - text: Chat
+                - link "Config" [ref=e229] [cursor=pointer]:
+                  - /url: /agents/agent-builder/config
+                  - img [ref=e230]
+                  - text: Config
+                - link "View" [ref=e233] [cursor=pointer]:
+                  - /url: /agents/agent-builder
+                  - img [ref=e234]
+                  - text: View
+                - button "Delete" [ref=e237] [cursor=pointer]:
+                  - img [ref=e238]
+                  - text: Delete
+          - article [ref=e241]:
+            - generic [ref=e242]:
+              - generic [ref=e243]:
+                - generic [ref=e244]:
+                  - generic [ref=e245]: NS
+                  - generic [ref=e246]:
+                    - button "Nova Strategy" [ref=e247] [cursor=pointer]
+                    - paragraph [ref=e248]: Product strategist
+                - generic [ref=e250]: Online
+              - generic [ref=e252]:
+                - generic [ref=e253]:
+                  - generic [ref=e254]: Anthropic
+                  - generic [ref=e255]: Online
+                - paragraph [ref=e257]: claude-3-7-sonnet
+              - generic [ref=e258]:
+                - generic [ref=e260]:
+                  - generic [ref=e261]: Energy
+                  - generic [ref=e262]: 63%
+                - generic [ref=e266]:
+                  - generic [ref=e267]: Curiosity
+                  - generic [ref=e268]: 63%
+                - generic [ref=e272]:
+                  - generic [ref=e273]: Satisfaction
+                  - generic [ref=e274]: 67%
+                - generic [ref=e278]:
+                  - generic [ref=e279]: Motivation
+                  - generic [ref=e280]: 67%
+              - generic [ref=e283]:
+                - link "Chat" [ref=e284] [cursor=pointer]:
+                  - /url: /chat/agent-strategy
+                  - img [ref=e285]
+                  - text: Chat
+                - link "Config" [ref=e287] [cursor=pointer]:
+                  - /url: /agents/agent-strategy/config
+                  - img [ref=e288]
+                  - text: Config
+                - link "View" [ref=e291] [cursor=pointer]:
+                  - /url: /agents/agent-strategy
+                  - img [ref=e292]
+                  - text: View
+                - button "Delete" [ref=e295] [cursor=pointer]:
+                  - img [ref=e296]
+                  - text: Delete
+  - generic [ref=e422]:
+    - img [ref=e423]
+    - generic [ref=e426]: Agent created!
+    - button "Dismiss notification" [ref=e427] [cursor=pointer]:
+      - img [ref=e428]

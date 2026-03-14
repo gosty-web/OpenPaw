@@ -1,0 +1,126 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🐾
+      - generic [ref=e7]:
+        - generic [ref=e8]: OpenPaw
+        - generic [ref=e9]: v0.1.0
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: MAIN
+        - navigation [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /
+            - img [ref=e15]
+            - generic [ref=e20]: Dashboard
+          - link "Chat" [ref=e21] [cursor=pointer]:
+            - /url: /chat
+            - img [ref=e22]
+            - generic [ref=e24]: Chat
+          - link "Agents" [ref=e25] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e26]
+            - generic [ref=e29]: Agents
+          - link "Workspaces" [ref=e30] [cursor=pointer]:
+            - /url: /workspaces
+            - img [ref=e31]
+            - generic [ref=e35]: Workspaces
+          - link "Instances" [ref=e36] [cursor=pointer]:
+            - /url: /instances
+            - img [ref=e37]
+            - generic [ref=e39]: Instances
+      - generic [ref=e40]:
+        - generic [ref=e41]: TOOLS
+        - navigation [ref=e42]:
+          - link "MCPs" [ref=e43] [cursor=pointer]:
+            - /url: /mcps
+            - img [ref=e44]
+            - generic [ref=e46]: MCPs
+          - link "Skills" [ref=e47] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e48]
+            - generic [ref=e50]: Skills
+          - link "Cron Jobs" [ref=e51] [cursor=pointer]:
+            - /url: /cron
+            - img [ref=e52]
+            - generic [ref=e55]: Cron Jobs
+          - link "Channels" [ref=e56] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e57]
+            - generic [ref=e63]: Channels
+      - generic [ref=e64]:
+        - generic [ref=e65]: SYSTEM
+        - navigation [ref=e66]:
+          - link "Settings" [ref=e67] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e68]
+            - generic [ref=e71]: Settings
+          - link "Import" [ref=e72] [cursor=pointer]:
+            - /url: /import
+            - img [ref=e73]
+            - generic [ref=e76]: Import
+          - link "Docs" [ref=e77] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e78]
+            - generic [ref=e80]: Docs
+    - generic [ref=e81]:
+      - generic [ref=e85]: Server offline
+      - button "Collapse sidebar" [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - generic [ref=e90]: Collapse sidebar
+  - generic [ref=e91]:
+    - banner [ref=e92]:
+      - heading "Chat" [level=1] [ref=e94]
+      - generic [ref=e95]:
+        - generic [ref=e96]: ⌘K
+        - generic [ref=e100]: Disconnected
+    - generic [ref=e102]:
+      - complementary [ref=e103]:
+        - generic [ref=e104]:
+          - generic [ref=e105]: Choose an agent
+          - paragraph [ref=e106]: Pick an agent to open a focused workspace with session history and live chat.
+        - generic [ref=e108]:
+          - button "NS Nova Strategy Product strategist Online Anthropic claude-3-7-sonnet" [ref=e109] [cursor=pointer]:
+            - generic [ref=e110]:
+              - generic [ref=e111]: NS
+              - generic [ref=e112]:
+                - generic [ref=e113]:
+                  - generic [ref=e114]: Nova Strategy
+                  - img [ref=e115]
+                - generic [ref=e117]: Product strategist
+                - generic [ref=e118]:
+                  - generic [ref=e119]: Online
+                  - generic [ref=e121]: Anthropic
+                  - generic [ref=e122]: claude-3-7-sonnet
+          - button "PB Pixel Builder Frontend engineer Working OpenAI gpt-4.1" [ref=e123] [cursor=pointer]:
+            - generic [ref=e124]:
+              - generic [ref=e125]: PB
+              - generic [ref=e126]:
+                - generic [ref=e127]:
+                  - generic [ref=e128]: Pixel Builder
+                  - img [ref=e129]
+                - generic [ref=e131]: Frontend engineer
+                - generic [ref=e132]:
+                  - generic [ref=e133]: Working
+                  - generic [ref=e135]: OpenAI
+                  - generic [ref=e136]: gpt-4.1
+          - button "OR Ops Relay Infrastructure operator Thinking Groq llama-3.3-70b" [ref=e137] [cursor=pointer]:
+            - generic [ref=e138]:
+              - generic [ref=e139]: OR
+              - generic [ref=e140]:
+                - generic [ref=e141]:
+                  - generic [ref=e142]: Ops Relay
+                  - img [ref=e143]
+                - generic [ref=e145]: Infrastructure operator
+                - generic [ref=e146]:
+                  - generic [ref=e147]: Thinking
+                  - generic [ref=e149]: Groq
+                  - generic [ref=e150]: llama-3.3-70b
+      - generic [ref=e153]:
+        - generic [ref=e154]:
+          - img [ref=e157]
+          - img [ref=e161]
+          - img [ref=e164]
+          - img [ref=e167]
+        - heading "Select an agent to start chatting" [level=1] [ref=e169]
+        - paragraph [ref=e170]: Open a dedicated chat workspace with session history, markdown-rich answers, and a faster path from idea to execution.

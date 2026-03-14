@@ -1,0 +1,149 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🐾
+      - generic [ref=e7]:
+        - generic [ref=e8]: OpenPaw
+        - generic [ref=e9]: v0.1.0
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: MAIN
+        - navigation [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /
+            - img [ref=e15]
+            - generic [ref=e20]: Dashboard
+          - link "Chat" [ref=e21] [cursor=pointer]:
+            - /url: /chat
+            - img [ref=e22]
+            - generic [ref=e24]: Chat
+          - link "Agents" [ref=e25] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e26]
+            - generic [ref=e29]: Agents
+          - link "Workspaces" [ref=e30] [cursor=pointer]:
+            - /url: /workspaces
+            - img [ref=e31]
+            - generic [ref=e35]: Workspaces
+          - link "Instances" [ref=e36] [cursor=pointer]:
+            - /url: /instances
+            - img [ref=e37]
+            - generic [ref=e39]: Instances
+      - generic [ref=e40]:
+        - generic [ref=e41]: TOOLS
+        - navigation [ref=e42]:
+          - link "MCPs" [ref=e43] [cursor=pointer]:
+            - /url: /mcps
+            - img [ref=e44]
+            - generic [ref=e46]: MCPs
+          - link "Skills" [ref=e47] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e48]
+            - generic [ref=e50]: Skills
+          - link "Cron Jobs" [ref=e51] [cursor=pointer]:
+            - /url: /cron
+            - img [ref=e52]
+            - generic [ref=e55]: Cron Jobs
+          - link "Channels" [ref=e56] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e57]
+            - generic [ref=e63]: Channels
+      - generic [ref=e64]:
+        - generic [ref=e65]: SYSTEM
+        - navigation [ref=e66]:
+          - link "Settings" [ref=e67] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e68]
+            - generic [ref=e71]: Settings
+          - link "Import" [ref=e72] [cursor=pointer]:
+            - /url: /import
+            - img [ref=e73]
+            - generic [ref=e76]: Import
+          - link "Docs" [ref=e77] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e78]
+            - generic [ref=e80]: Docs
+    - generic [ref=e81]:
+      - generic [ref=e85]: Server offline
+      - button "Collapse sidebar" [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - generic [ref=e90]: Collapse sidebar
+  - generic [ref=e91]:
+    - banner [ref=e92]:
+      - heading "Agent Chat" [level=1] [ref=e94]
+      - generic [ref=e95]:
+        - generic [ref=e96]: ⌘K
+        - generic [ref=e100]: Disconnected
+    - generic [ref=e102]:
+      - complementary [ref=e103]:
+        - generic [ref=e106]:
+          - generic [ref=e107]: PB
+          - generic [ref=e108]:
+            - generic [ref=e109]: Pixel Builder
+            - generic [ref=e110]: Frontend engineer
+            - generic [ref=e111]:
+              - generic [ref=e112]: Working
+              - generic [ref=e114]: OpenAI
+            - generic [ref=e115]:
+              - img [ref=e116]
+              - generic [ref=e119]: gpt-4.1
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - generic [ref=e122]: Sessions
+            - generic [ref=e123]: Resume context or start fresh.
+          - button [ref=e124] [cursor=pointer]:
+            - img [ref=e125]
+        - generic [ref=e127]:
+          - button "03231b9a... Active 2 messages less than a minute ago" [ref=e203] [cursor=pointer]:
+            - generic [ref=e204]:
+              - generic [ref=e205]: 03231b9a...
+              - generic [ref=e206]: Active
+            - generic [ref=e207]: 2 messages
+            - generic [ref=e208]: less than a minute ago
+          - button "a3a57e90... 2 messages 27 minutes ago" [ref=e209] [cursor=pointer]:
+            - generic [ref=e211]: a3a57e90...
+            - generic [ref=e212]: 2 messages
+            - generic [ref=e213]: 27 minutes ago
+      - generic [ref=e134]:
+        - generic [ref=e135]:
+          - generic [ref=e136]:
+            - generic [ref=e137]: PB
+            - generic [ref=e138]:
+              - generic [ref=e139]: Pixel Builder
+              - generic [ref=e140]:
+                - generic [ref=e141]: Frontend engineer
+                - generic [ref=e142]: Working
+          - generic [ref=e144]:
+            - link "View agent" [ref=e145] [cursor=pointer]:
+              - /url: /agents/agent-builder
+            - combobox [ref=e146]:
+              - option "gpt-4.1" [selected]
+              - option "claude-3-7-sonnet"
+              - option "llama-3.3-70b"
+        - generic [ref=e148]:
+          - generic [ref=e216]:
+            - generic [ref=e217]: Who are you?
+            - generic [ref=e218]: less than a minute ago
+          - generic [ref=e220]:
+            - generic [ref=e221]: PB
+            - generic [ref=e222]:
+              - generic [ref=e223]:
+                - paragraph [ref=e224]:
+                  - text: I’m
+                  - strong [ref=e225]: Pixel Builder
+                  - text: ", your frontend engineer."
+                - paragraph [ref=e226]: "I’m tuned for:"
+                - list [ref=e227]:
+                  - listitem [ref=e228]: crisp guidance
+                  - listitem [ref=e229]: practical next steps
+                  - listitem [ref=e230]: local-first workflows inside OpenPaw
+              - generic [ref=e231]: less than a minute ago
+        - generic [ref=e175]:
+          - generic [ref=e176]:
+            - button "Attach file" [ref=e177] [cursor=pointer]:
+              - img [ref=e178]
+            - button "Voice input" [ref=e180] [cursor=pointer]:
+              - img [ref=e181]
+          - textbox "Message Pixel Builder..." [ref=e185]
+          - button "Send message" [disabled] [ref=e186]:
+            - img [ref=e187]

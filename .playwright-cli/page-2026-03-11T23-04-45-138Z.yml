@@ -1,0 +1,80 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🐾
+      - generic [ref=e7]:
+        - generic [ref=e8]: OpenPaw
+        - generic [ref=e9]: v0.1.0
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: MAIN
+        - navigation [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /
+            - img [ref=e15]
+            - generic [ref=e20]: Dashboard
+          - link "Chat" [ref=e21] [cursor=pointer]:
+            - /url: /chat
+            - img [ref=e22]
+            - generic [ref=e24]: Chat
+          - link "Agents" [ref=e25] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e26]
+            - generic [ref=e29]: Agents
+          - link "Workspaces" [ref=e30] [cursor=pointer]:
+            - /url: /workspaces
+            - img [ref=e31]
+            - generic [ref=e35]: Workspaces
+          - link "Instances" [ref=e36] [cursor=pointer]:
+            - /url: /instances
+            - img [ref=e37]
+            - generic [ref=e39]: Instances
+      - generic [ref=e40]:
+        - generic [ref=e41]: TOOLS
+        - navigation [ref=e42]:
+          - link "MCPs" [active] [ref=e43] [cursor=pointer]:
+            - /url: /mcps
+            - img [ref=e44]
+            - generic [ref=e46]: MCPs
+          - link "Skills" [ref=e47] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e48]
+            - generic [ref=e50]: Skills
+          - link "Cron Jobs" [ref=e51] [cursor=pointer]:
+            - /url: /cron
+            - img [ref=e52]
+            - generic [ref=e55]: Cron Jobs
+          - link "Channels" [ref=e56] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e57]
+            - generic [ref=e63]: Channels
+      - generic [ref=e64]:
+        - generic [ref=e65]: SYSTEM
+        - navigation [ref=e66]:
+          - link "Settings" [ref=e67] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e68]
+            - generic [ref=e71]: Settings
+          - link "Import" [ref=e72] [cursor=pointer]:
+            - /url: /import
+            - img [ref=e73]
+            - generic [ref=e76]: Import
+          - link "Docs" [ref=e77] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e78]
+            - generic [ref=e80]: Docs
+    - generic [ref=e81]:
+      - generic [ref=e85]: Server online
+      - button "Collapse sidebar" [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - generic [ref=e90]: Collapse sidebar
+  - generic [ref=e91]:
+    - banner [ref=e92]:
+      - heading "MCPs" [level=1] [ref=e126]
+      - generic [ref=e95]:
+        - generic [ref=e96]: ⌘K
+        - generic [ref=e100]: Connected
+    - generic [ref=e127]:
+      - heading "MCPs" [level=1] [ref=e128]
+      - paragraph [ref=e129]: Connect and manage Model Context Protocol servers
+      - generic [ref=e130]: Loading...

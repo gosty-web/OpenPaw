@@ -1,0 +1,146 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🐾
+      - generic [ref=e7]:
+        - generic [ref=e8]: OpenPaw
+        - generic [ref=e9]: v0.1.0
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: MAIN
+        - navigation [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /
+            - img [ref=e15]
+            - generic [ref=e20]: Dashboard
+          - link "Chat" [ref=e21] [cursor=pointer]:
+            - /url: /chat
+            - img [ref=e22]
+            - generic [ref=e24]: Chat
+          - link "Agents" [ref=e25] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e26]
+            - generic [ref=e29]: Agents
+          - link "Workspaces" [ref=e30] [cursor=pointer]:
+            - /url: /workspaces
+            - img [ref=e31]
+            - generic [ref=e35]: Workspaces
+          - link "Instances" [ref=e36] [cursor=pointer]:
+            - /url: /instances
+            - img [ref=e37]
+            - generic [ref=e39]: Instances
+      - generic [ref=e40]:
+        - generic [ref=e41]: TOOLS
+        - navigation [ref=e42]:
+          - link "MCPs" [ref=e43] [cursor=pointer]:
+            - /url: /mcps
+            - img [ref=e44]
+            - generic [ref=e46]: MCPs
+          - link "Skills" [ref=e47] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e48]
+            - generic [ref=e50]: Skills
+          - link "Cron Jobs" [ref=e51] [cursor=pointer]:
+            - /url: /cron
+            - img [ref=e52]
+            - generic [ref=e55]: Cron Jobs
+          - link "Channels" [ref=e56] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e57]
+            - generic [ref=e63]: Channels
+      - generic [ref=e64]:
+        - generic [ref=e65]: SYSTEM
+        - navigation [ref=e66]:
+          - link "Settings" [ref=e67] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e68]
+            - generic [ref=e71]: Settings
+          - link "Import" [ref=e72] [cursor=pointer]:
+            - /url: /import
+            - img [ref=e73]
+            - generic [ref=e76]: Import
+          - link "Docs" [ref=e77] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e78]
+            - generic [ref=e80]: Docs
+    - generic [ref=e81]:
+      - generic [ref=e85]: Server online
+      - button "Collapse sidebar" [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - generic [ref=e90]: Collapse sidebar
+  - generic [ref=e91]:
+    - banner [ref=e92]:
+      - heading "Dashboard" [level=1] [ref=e94]
+      - generic [ref=e95]:
+        - generic [ref=e96]: ⌘K
+        - generic [ref=e100]: Connected
+    - generic [ref=e103]:
+      - generic [ref=e105]:
+        - generic [ref=e106]:
+          - paragraph [ref=e107]: Good morning
+          - heading "Welcome back to OpenPaw" [level=1] [ref=e108]
+          - generic [ref=e109]:
+            - generic [ref=e111]: OpenPaw is online
+            - generic [ref=e112]: •
+            - generic [ref=e113]: Last check less than a minute ago
+        - generic [ref=e114]:
+          - generic [ref=e115]: Platform
+          - generic [ref=e116]: Version 0.1.0
+      - generic [ref=e117]:
+        - generic [ref=e120]:
+          - img [ref=e122]
+          - generic [ref=e125]: "0"
+          - generic [ref=e126]: Total Agents
+        - generic [ref=e129]:
+          - img [ref=e131]
+          - generic [ref=e133]: "0"
+          - generic [ref=e134]: Active Conversations
+        - generic [ref=e137]:
+          - img [ref=e139]
+          - generic [ref=e142]: "0"
+          - generic [ref=e143]: Tasks Completed
+        - generic [ref=e146]:
+          - img [ref=e148]
+          - generic [ref=e150]: "0"
+          - generic [ref=e151]: Skills Loaded
+      - generic [ref=e152]:
+        - generic [ref=e153]:
+          - generic [ref=e154]:
+            - generic [ref=e156]:
+              - heading "Agent Status" [level=2] [ref=e157]
+              - paragraph [ref=e158]: Live readiness across your configured agents.
+            - generic [ref=e159]:
+              - img [ref=e160]
+              - heading "No agents yet" [level=3] [ref=e163]
+              - paragraph [ref=e164]: Create your first agent to start conversations, run tasks, and connect the rest of your local-first workflow.
+              - button "Create your first agent" [ref=e165] [cursor=pointer]
+          - generic [ref=e166]:
+            - generic [ref=e167]:
+              - heading "Quick Actions" [level=2] [ref=e168]
+              - paragraph [ref=e169]: Jump straight into the most common setup flows.
+            - generic [ref=e170]:
+              - button "New Agent Spin up a new local worker with tools and memory." [ref=e171] [cursor=pointer]:
+                - img [ref=e172]
+                - generic [ref=e175]: New Agent
+                - generic [ref=e176]: Spin up a new local worker with tools and memory.
+              - button "New Chat Open a fresh conversation with your active agents." [ref=e177] [cursor=pointer]:
+                - img [ref=e178]
+                - generic [ref=e180]: New Chat
+                - generic [ref=e181]: Open a fresh conversation with your active agents.
+              - button "Add MCP Connect more tools and context through MCP servers." [ref=e182] [cursor=pointer]:
+                - img [ref=e183]
+                - generic [ref=e185]: Add MCP
+                - generic [ref=e186]: Connect more tools and context through MCP servers.
+              - button "Import from OpenClaw Bring over agents, prompts, and runtime config from an existing setup." [ref=e187] [cursor=pointer]:
+                - img [ref=e188]
+                - generic [ref=e190]: Import from OpenClaw
+                - generic [ref=e191]: Bring over agents, prompts, and runtime config from an existing setup.
+        - complementary [ref=e192]:
+          - generic [ref=e193]:
+            - heading "Recent Activity" [level=2] [ref=e194]
+            - paragraph [ref=e195]: Latest message traffic across your agent network.
+          - generic [ref=e196]:
+            - img [ref=e197]
+            - heading "No recent messages" [level=3] [ref=e199]
+            - paragraph [ref=e200]: Once your agents start chatting, the latest activity will appear here with timestamps and previews.
+            - button "Open chat" [ref=e201] [cursor=pointer]

@@ -1,0 +1,214 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🐾
+      - generic [ref=e7]:
+        - generic [ref=e8]: OpenPaw
+        - generic [ref=e9]: v0.1.0
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: MAIN
+        - navigation [ref=e13]:
+          - link "Dashboard" [ref=e14] [cursor=pointer]:
+            - /url: /
+            - img [ref=e15]
+            - generic [ref=e20]: Dashboard
+          - link "Chat" [ref=e21] [cursor=pointer]:
+            - /url: /chat
+            - img [ref=e22]
+            - generic [ref=e24]: Chat
+          - link "Agents" [ref=e25] [cursor=pointer]:
+            - /url: /agents
+            - img [ref=e26]
+            - generic [ref=e29]: Agents
+          - link "Workspaces" [ref=e30] [cursor=pointer]:
+            - /url: /workspaces
+            - img [ref=e31]
+            - generic [ref=e35]: Workspaces
+          - link "Instances" [ref=e36] [cursor=pointer]:
+            - /url: /instances
+            - img [ref=e37]
+            - generic [ref=e39]: Instances
+      - generic [ref=e40]:
+        - generic [ref=e41]: TOOLS
+        - navigation [ref=e42]:
+          - link "MCPs" [ref=e43] [cursor=pointer]:
+            - /url: /mcps
+            - img [ref=e44]
+            - generic [ref=e46]: MCPs
+          - link "Skills" [ref=e47] [cursor=pointer]:
+            - /url: /skills
+            - img [ref=e48]
+            - generic [ref=e50]: Skills
+          - link "Cron Jobs" [ref=e51] [cursor=pointer]:
+            - /url: /cron
+            - img [ref=e52]
+            - generic [ref=e55]: Cron Jobs
+          - link "Channels" [ref=e56] [cursor=pointer]:
+            - /url: /channels
+            - img [ref=e57]
+            - generic [ref=e63]: Channels
+      - generic [ref=e64]:
+        - generic [ref=e65]: SYSTEM
+        - navigation [ref=e66]:
+          - link "Settings" [ref=e67] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e68]
+            - generic [ref=e71]: Settings
+          - link "Import" [ref=e72] [cursor=pointer]:
+            - /url: /import
+            - img [ref=e73]
+            - generic [ref=e76]: Import
+          - link "Docs" [ref=e77] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e78]
+            - generic [ref=e80]: Docs
+    - generic [ref=e81]:
+      - generic [ref=e85]: Server offline
+      - button "Collapse sidebar" [ref=e86] [cursor=pointer]:
+        - img [ref=e87]
+        - generic [ref=e90]: Collapse sidebar
+  - generic [ref=e91]:
+    - banner [ref=e92]:
+      - heading "Channels" [level=1] [ref=e94]
+      - generic [ref=e95]:
+        - generic [ref=e96]: ⌘K
+        - generic [ref=e100]: Disconnected
+    - generic [ref=e102]:
+      - generic [ref=e103]:
+        - banner [ref=e104]:
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - heading "Channels" [level=1] [ref=e107]
+              - generic [ref=e108]: 1/5 connected
+            - paragraph [ref=e109]: Connect your agents to messaging platforms
+        - generic [ref=e110]:
+          - generic [ref=e112]:
+            - generic [ref=e113]:
+              - img [ref=e115]
+              - generic [ref=e117]: Not connected
+            - generic [ref=e119]:
+              - heading "Telegram" [level=2] [ref=e120]
+              - paragraph [ref=e121]: Reply to direct messages and group chats through a Telegram bot.
+            - generic [ref=e122]:
+              - generic [ref=e123]:
+                - img [ref=e124]
+                - generic [ref=e127]: No agent selected
+              - generic [ref=e128]:
+                - img [ref=e129]
+                - generic [ref=e132]: http://localhost:7411/webhooks/telegram
+            - button "Connect" [active] [ref=e134] [cursor=pointer]
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - img [ref=e139]
+              - generic [ref=e142]: Not connected
+            - generic [ref=e144]:
+              - heading "Discord" [level=2] [ref=e145]
+              - paragraph [ref=e146]: Make agents available in Discord servers with slash commands.
+            - generic [ref=e147]:
+              - generic [ref=e148]:
+                - img [ref=e149]
+                - generic [ref=e152]: No agent selected
+              - generic [ref=e153]:
+                - img [ref=e154]
+                - generic [ref=e157]: Updated 3/13/2026
+            - button "Connect" [ref=e159] [cursor=pointer]
+          - generic [ref=e161]:
+            - generic [ref=e162]:
+              - img [ref=e164]
+              - generic [ref=e166]: Not connected
+            - generic [ref=e168]:
+              - heading "Slack" [level=2] [ref=e169]
+              - paragraph [ref=e170]: Bring agents into channels and threads inside your Slack workspace.
+            - generic [ref=e171]:
+              - generic [ref=e172]:
+                - img [ref=e173]
+                - generic [ref=e176]: No agent selected
+              - generic [ref=e177]:
+                - img [ref=e178]
+                - generic [ref=e181]: Updated 3/13/2026
+            - button "Connect" [ref=e183] [cursor=pointer]
+          - generic [ref=e185]:
+            - generic [ref=e186]:
+              - img [ref=e188]
+              - generic [ref=e190]: Not connected
+            - generic [ref=e192]:
+              - heading "WhatsApp" [level=2] [ref=e193]
+              - paragraph [ref=e194]: Use WPPConnect to bridge local WhatsApp sessions into OpenPaw.
+            - generic [ref=e195]:
+              - generic [ref=e196]:
+                - img [ref=e197]
+                - generic [ref=e200]: No agent selected
+              - generic [ref=e201]:
+                - img [ref=e202]
+                - generic [ref=e205]: Awaiting QR scan
+            - button "Connect" [ref=e207] [cursor=pointer]
+          - generic [ref=e209]:
+            - generic [ref=e210]:
+              - img [ref=e212]
+              - generic [ref=e215]: Connected
+            - generic [ref=e217]:
+              - heading "Web" [level=2] [ref=e218]
+              - paragraph [ref=e219]: Built in chat surface for local conversations inside OpenPaw.
+            - generic [ref=e220]:
+              - generic [ref=e221]:
+                - img [ref=e222]
+                - generic [ref=e225]: Always active in the OpenPaw client
+              - generic [ref=e226]:
+                - img [ref=e227]
+                - generic [ref=e230]: http://localhost:5173/chat
+            - button "View" [ref=e232] [cursor=pointer]
+      - generic [ref=e233]:
+        - button "Close modal" [ref=e234]
+        - generic [ref=e235]:
+          - generic [ref=e236]:
+            - heading "Telegram Configuration" [level=2] [ref=e237]
+            - button "Close modal" [ref=e238] [cursor=pointer]:
+              - img [ref=e239]
+          - generic [ref=e243]:
+            - generic [ref=e244]:
+              - generic [ref=e245]:
+                - img [ref=e246]
+                - text: Create your Telegram bot
+              - generic [ref=e249]:
+                - generic [ref=e250]:
+                  - generic [ref=e251]: "1"
+                  - paragraph [ref=e252]: Open Telegram and start a chat with @BotFather.
+                - generic [ref=e253]:
+                  - generic [ref=e254]: "2"
+                  - paragraph [ref=e255]: Create a new bot, copy the bot token, and paste it into OpenPaw.
+                - generic [ref=e256]:
+                  - generic [ref=e257]: "3"
+                  - paragraph [ref=e258]: Set your webhook to the generated URL, then choose which agent should respond.
+            - generic [ref=e259]:
+              - generic [ref=e260]:
+                - generic [ref=e261]:
+                  - generic [ref=e262]: Bot Token
+                  - textbox "Bot Token" [ref=e263]:
+                    - /placeholder: 123456:telegram-bot-token
+                - generic [ref=e264]:
+                  - generic [ref=e265]: Webhook URL
+                  - textbox "Webhook URL" [ref=e266]: http://localhost:7411/webhooks/telegram
+                - generic [ref=e267]:
+                  - generic [ref=e268]: Agent
+                  - combobox "Agent" [ref=e269]:
+                    - option "Select an agent" [selected]
+                    - option "Nova Strategy - Product strategist"
+                    - option "Pixel Builder - Frontend engineer"
+                    - option "Ops Relay - Infrastructure operator"
+                - generic [ref=e270]:
+                  - generic [ref=e271]: Allow List
+                  - textbox "Allow List" [ref=e272]:
+                    - /placeholder: 12345, 67890
+              - generic [ref=e273]:
+                - generic [ref=e274]:
+                  - img [ref=e275]
+                  - text: Send a test message
+                - generic [ref=e278]:
+                  - generic [ref=e279]: Chat ID
+                  - textbox "Chat ID" [ref=e280]:
+                    - /placeholder: Telegram chat ID
+                - button "Test" [ref=e281] [cursor=pointer]
+            - generic [ref=e282]:
+              - button "Cancel" [ref=e283] [cursor=pointer]
+              - button "Save" [ref=e284] [cursor=pointer]
