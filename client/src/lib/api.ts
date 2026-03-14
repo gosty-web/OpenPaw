@@ -281,10 +281,17 @@ type RequestOptions = Omit<RequestInit, 'body'> & {
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, headers, ...rest } = options
 
+  const token = localStorage.getItem('openpaw_token');
+  if (!token && !path.startsWith('/health')) {
+    window.location.href = '/login';
+    return {} as T;
+  }
+
   const response = await fetch(`/api${path}`, {
     ...rest,
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { 'X-OpenPaw-Token': token } : {}),
       ...headers,
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -304,10 +311,17 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
 async function download(path: string, options: RequestOptions = {}): Promise<Blob> {
   const { body, headers, ...rest } = options
 
+  const token = localStorage.getItem('openpaw_token');
+  if (!token) {
+    window.location.href = '/login';
+    throw new Error('Unauthorized');
+  }
+
   const response = await fetch(`/api${path}`, {
     ...rest,
     headers: {
       'Content-Type': 'application/json',
+      'X-OpenPaw-Token': token,
       ...headers,
     },
     body: body === undefined ? undefined : JSON.stringify(body),

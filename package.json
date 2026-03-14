@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"#7c3aed,#10b981\" \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "setup": "npm install && npm install --prefix server && npm install --prefix client",
-    "build": "npm run build --prefix client && npm run build --prefix server"
+    "build": "npm run build --prefix client && npm run build --prefix server",
+    "install:global": "npm link --prefix apps/cli",
+    "docs:serve": "npx serve docs -p 3001"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

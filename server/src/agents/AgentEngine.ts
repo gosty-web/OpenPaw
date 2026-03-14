@@ -51,12 +51,32 @@ export class AgentEngine {
       const systemContext = await this.agentManager.getSoulContext(this.agentId);
       const history = this.getHistory(sessionId, 20);
       const memories = await this.memoryManager.search(this.agentId, userMessage, 5);
+
+      let processedMessage = userMessage;
+      let msgMetadata: Record<string, any> = {};
+      const trimmed = userMessage.trim();
+
+      if (trimmed.startsWith('/')) {
+        const parts = trimmed.slice(1).split(' ');
+        const commandName = parts[0].toLowerCase();
+        const args = parts.slice(1).join(' ');
+        const command = db.prepare('SELECT * FROM slash_commands WHERE name = ?').get(commandName) as any;
+        if (command) {
+          processedMessage = command.prompt_template.replace('{{args}}', args);
+          msgMetadata = { original_command: trimmed, was_slash_command: true };
+        }
+      }
+
+      const thinkMode = trimmed.startsWith('/think') || processedMessage.includes('<think>');
+      if (thinkMode) {
+        msgMetadata.think_mode = true;
+      }
       
       const messages: LLMMessage[] = [
         { role: 'system', content: systemContext },
         ...memories.map(m => ({ role: 'system', content: `Relevant Memory: ${m.content}` } as LLMMessage)),
         ...history.map(h => ({ role: h.role as any, content: h.content })),
-        { role: 'user', content: userMessage }
+        { role: 'user', content: processedMessage }
       ];
 
       let response = await this.router.chat({
@@ -164,11 +184,31 @@ export class AgentEngine {
       const history = this.getHistory(sessionId, 20);
       const memories = await this.memoryManager.search(this.agentId, userMessage, 5);
 
+      let processedMessage = userMessage;
+      let msgMetadata: Record<string, any> = {};
+      const trimmed = userMessage.trim();
+
+      if (trimmed.startsWith('/')) {
+        const parts = trimmed.slice(1).split(' ');
+        const commandName = parts[0].toLowerCase();
+        const args = parts.slice(1).join(' ');
+        const command = db.prepare('SELECT * FROM slash_commands WHERE name = ?').get(commandName) as any;
+        if (command) {
+          processedMessage = command.prompt_template.replace('{{args}}', args);
+          msgMetadata = { original_command: trimmed, was_slash_command: true };
+        }
+      }
+
+      const thinkMode = trimmed.startsWith('/think') || processedMessage.includes('<think>');
+      if (thinkMode) {
+        msgMetadata.think_mode = true;
+      }
+
       const messages: LLMMessage[] = [
         { role: 'system', content: systemContext },
         ...memories.map(m => ({ role: 'system', content: `Relevant Memory: ${m.content}` } as LLMMessage)),
         ...history.map(h => ({ role: h.role as any, content: h.content })),
-        { role: 'user', content: userMessage }
+        { role: 'user', content: processedMessage }
       ];
 
       let fullResponse = '';

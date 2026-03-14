@@ -1,0 +1,13 @@
+{
+  "name": "openpaw-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "openpaw": "./bin/openpaw.js"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.1.0",
+    "dotenv": "^17.3.1",
+    "open": "^11.0.0"
+  }
+}

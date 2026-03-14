@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
 import { runMigrations } from './migrations.js'
-import { seedDefaultSettings } from './seed.js'
+import { seedDefaultSettings, seedBuiltinSlashCommands } from './seed.js'
 import { TABLE_COUNT } from './schema.js'
 
 let db: Database.Database | null = null
@@ -37,6 +37,7 @@ export function getDb(): Database.Database {
   // Run migrations and seed data
   runMigrations(db)
   seedDefaultSettings(db)
+  seedBuiltinSlashCommands(db)
 
   console.log(`[DB] ${TABLE_COUNT} tables ready`)
 

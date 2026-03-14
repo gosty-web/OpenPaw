@@ -3,6 +3,21 @@ import { AgentEngine } from '../agents/AgentEngine.js';
 import { getDb } from '../db/index.js';
 
 const router = Router();
+const db = getDb();
+
+// POST /api/chat
+router.post('/', async (req, res) => {
+  try {
+    const { agentId, message, sessionId } = req.body;
+    if (!agentId) return res.status(400).json({ error: 'agentId is required' });
+    
+    const engine = new AgentEngine(agentId);
+    const result = await engine.chat(message, sessionId);
+    res.status(201).json(result);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 // POST /api/agents/:id/chat
 router.post('/:id/chat', async (req, res) => {

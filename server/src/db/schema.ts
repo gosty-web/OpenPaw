@@ -242,4 +242,15 @@ CREATE INDEX IF NOT EXISTS idx_memories_agent_tier ON memories(agent_id, tier);
 CREATE INDEX IF NOT EXISTS idx_messages_session ON messages(agent_id, session_id);
 CREATE INDEX IF NOT EXISTS idx_tasks_workspace_status ON tasks(workspace_id, status);
 CREATE INDEX IF NOT EXISTS idx_instance_logs_instance ON instance_logs(instance_id, created_at);
+
+CREATE TABLE IF NOT EXISTS slash_commands (
+  id TEXT PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL,
+  display_name TEXT NOT NULL,
+  description TEXT,
+  prompt_template TEXT NOT NULL,
+  is_builtin INTEGER DEFAULT 0,
+  agent_id TEXT,
+  created_at TEXT
+);
 `

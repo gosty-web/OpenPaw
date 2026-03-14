@@ -5,11 +5,16 @@ import App from './App'
 import { ToastContainer } from './components/Toast'
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-      <ToastContainer />
-    </BrowserRouter>
-  </React.StrictMode>,
-)
+const token = localStorage.getItem('openpaw_token');
+if (!token && window.location.pathname !== '/login') {
+   window.location.href = '/login';
+} else {
+  ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+        <ToastContainer />
+      </BrowserRouter>
+    </React.StrictMode>,
+  )
+}
